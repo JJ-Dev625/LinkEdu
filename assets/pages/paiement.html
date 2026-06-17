@@ -53,45 +53,50 @@
         </div>
       </div>
 
-      <form id="payment-form" class="payment-method-form" onsubmit="event.preventDefault();">
-        <div id="form-error-container"></div>
-
+      <form id="payment-form" class="payment-method-form">
         <label class="method-label">Choisir un mode de paiement :</label>
         
         <div class="method-options">
-          <input type="radio" id="airtel" name="payment-method" value="airtel">
-          <label for="airtel" class="method-card">
+          <div class="provider-card active" data-provider="airtel">
             <img src="../images/a.jpg" alt="Airtel Money" class="method-logo">
             <span>Airtel Money</span>
-          </label>
+          </div>
 
-          <input type="radio" id="moov" name="payment-method" value="moov">
-          <label for="moov" class="method-card">
+          <div class="provider-card" data-provider="moov">
             <img src="../images/m.jpg" alt="Moov Money" class="method-logo">
             <span>Moov Money</span>
-          </label>
+          </div>
         </div>
 
         <div class="input-group">
-          <label for="phone-number">Numéro de téléphone :</label>
-          <input type="tel" id="phone-number" placeholder="Ex: 077 00 00 00" required>
+          <label for="phone-input">Numéro de téléphone :</label>
+          <input type="tel" id="phone-input" placeholder="Ex: 077 00 00 00" required>
         </div>
 
-        <div class="actions-section" style="position: relative; z-index: 10;">
-          <button type="button" id="main-submit-btn" class="btn btn-primary">Payer maintenant</button>
+        <div class="actions-section">
+          <button type="submit" id="main-submit-btn" class="btn btn-primary">Payer maintenant</button>
           <a href="../pages/dashboard1.html" class="btn-back">Payer plus tard</a>
         </div>
       </form>
     </main>
   </div>
 
-  <div id="payment-overlay" class="payment-overlay hidden">
+  <div id="payment-modal" class="payment-overlay hidden">
     <div class="modal-content">
       <div id="modal-status"></div>
+      
+      <form id="pin-form" style="margin-top: 15px;">
+        <input type="password" id="pin-input" maxlength="4" placeholder="••••" autocomplete="off"
+          style="letter-spacing: 12px; text-align: center; font-size: 24px; padding: 10px; width: 60%; margin-bottom: 15px; border: 2px solid #D1D5DB; border-radius: 8px; outline: none;">
+        
+        <div style="display: flex; gap: 10px;">
+          <button type="button" id="cancel-btn" class="btn" style="background-color: #EF4444; color: white;">Annuler</button>
+          <button type="submit" class="btn" style="background-color: #10B881; color: white;">Confirmer</button>
+        </div>
+      </form>
     </div>
   </div>
 
   <script src="../js/paiement.js"></script>
-    
 </body>
 </html>
