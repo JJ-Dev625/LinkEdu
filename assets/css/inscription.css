@@ -1,0 +1,143 @@
+/* ==========================================================================
+   1. STRUCTURE GLOBALE
+   ========================================================================== */
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #050505;
+  background-color: #FFFFFF !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.register-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   2. EN-TÊTE & LOGO (Ton style de marque)
+   ========================================================================== */
+.logo-wrapper {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 25px;
+}
+
+.register-logo {
+  width: 100px !important;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.register-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #1F3962; /* Ton bleu sérieux */
+  margin: 0 0 8px 0;
+}
+
+.register-subtitle {
+  font-size: 14px;
+  color: #6B7280;
+  margin: 0;
+  padding: 0 10px;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   3. FORMULAIRES & ALIGNEMENTS
+   ========================================================================== */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.input-group label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #1F3962;
+  text-align: left;
+}
+
+/* Design moderne et arrondi pour les inputs et le select */
+.input-group input, 
+.custom-select {
+  padding: 12px !important;
+  border: 1px solid #D1D5DB !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background-color: #FFFFFF;
+}
+
+.custom-select {
+  color: #374151;
+  cursor: pointer;
+  appearance: none; /* Supprime le design par défaut des navigateurs */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F3962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px !important;
+}
+
+/* ==========================================================================
+   4. BOUTONS (Cohérence parfaite avec l'accueil)
+   ========================================================================== */
+.btn {
+  padding: 14px !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  cursor: pointer;
+  text-align: center;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  text-decoration: none !important;
+}
+
+/* Ton fameux vert émeraude */
+.btn-primary {
+  background-color: #10B881 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  margin-top: 5px;
+}
+
+/* Bouton pour revenir à la connexion */
+.btn-secondary {
+  background-color: transparent !important;
+  color: #1F3962 !important;
+  border: 1px solid #1F3962 !important;
+}
+
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  color: #9CA3AF;
+  font-size: 14px;
+}
+
+.login-section p {
+  text-align: center;
+  font-size: 14px;
+  color: #4B5563;
+  margin-bottom: 12px;
+}
+
+

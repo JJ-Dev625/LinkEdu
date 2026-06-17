@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paiement - LinkEdu</title>
+  <link rel="stylesheet" href="../css/paiement.css">
+</head>
+<body>
+
+  <div class="payment-container">
+    
+    <header class="payment-header">
+      <div class="logo-mini">
+        <img src="../images/logo.png" alt="LinkEdu" class="mini-logo-img">
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-steps">Étape 3 sur 3 : Règlement</div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="payment-main">
+      <div class="instruction-box">
+        <h3>Finaliser l'inscription / Réinscription</h3>
+        <p>Procédez au règlement pour activer l'accès au Dashboard pour la nouvelle année scolaire.</p>
+      </div>
+
+      <div class="reinscription-box" style="background-color: #F3F4F6; padding: 12px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+        <label style="font-size: 12px; font-weight: 600; color: #1F3962; cursor: pointer;">
+          <input type="checkbox" id="is-reinscription" style="margin-right: 6px;"> 
+          S'agit-il d'une réinscription ?
+        </label>
+        
+        <div id="matricule-container" style="display: none; margin-top: 10px; animation: fadeIn 0.3s ease;">
+          <input type="text" id="student-matricule" placeholder="Entrez le Matricule de l'élève (Ex: 241X99)" 
+            style="padding: 8px 12px; font-size: 13px; width: 100%; border: 1px solid #D1D5DB; border-radius: 6px; box-sizing: border-box; text-transform: uppercase; outline: none;">
+          <button type="button" id="btn-verifier-matricule" class="btn" style="background-color: #1F3962; color: white; padding: 8px; font-size: 12px; margin-top: 6px; border-radius: 6px; width: 100%; border: none; cursor: pointer; font-weight: 600;">Vérifier le dossier</button>
+        </div>
+      </div>
+
+      <div class="payment-summary">
+        <h4>Récapitulatif <span id="summary-badge" style="font-size: 11px; font-weight: normal; color: #6B7280;"></span></h4>
+        <div class="summary-item">
+          <span>Frais de scolarité / Réinscription</span>
+          <span class="price">50 000 FCFA</span>
+        </div>
+        <div class="summary-item total">
+          <span>Total à payer</span>
+          <span class="price">50 000 FCFA</span>
+        </div>
+      </div>
+
+      <form id="payment-form" class="payment-method-form" onsubmit="event.preventDefault();">
+        <div id="form-error-container"></div>
+
+        <label class="method-label">Choisir un mode de paiement :</label>
+        
+        <div class="method-options">
+          <input type="radio" id="airtel" name="payment-method" value="airtel">
+          <label for="airtel" class="method-card">
+            <img src="../images/a.jpg" alt="Airtel Money" class="method-logo">
+            <span>Airtel Money</span>
+          </label>
+
+          <input type="radio" id="moov" name="payment-method" value="moov">
+          <label for="moov" class="method-card">
+            <img src="../images/m.jpg" alt="Moov Money" class="method-logo">
+            <span>Moov Money</span>
+          </label>
+        </div>
+
+        <div class="input-group">
+          <label for="phone-number">Numéro de téléphone :</label>
+          <input type="tel" id="phone-number" placeholder="Ex: 077 00 00 00" required>
+        </div>
+
+        <div class="actions-section" style="position: relative; z-index: 10;">
+          <button type="button" id="main-submit-btn" class="btn btn-primary">Payer maintenant</button>
+          <a href="../pages/dashboard1.html" class="btn-back">Payer plus tard</a>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <div id="payment-overlay" class="payment-overlay hidden">
+    <div class="modal-content">
+      <div id="modal-status"></div>
+    </div>
+  </div>
+
+  <script src="../js/paiement.js"></script>
+    
+</body>
+</html>

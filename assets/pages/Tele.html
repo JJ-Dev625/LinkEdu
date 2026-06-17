@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documents - LinkEdu</title>
+  <link rel="stylesheet" href="../css/Tele.css">
+</head>
+<body>
+
+  <div class="upload-container">
+    
+    <header class="upload-header">
+      <div class="logo-mini">
+        <img src="../images/logo.png" alt="LinkEdu" class="mini-logo-img">
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-steps">Étape 2 sur 3 : Dossier administratif</div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="upload-main">
+      <div class="instruction-box">
+        <h3>Téléversement des pièces</h3>
+        <p>Veuillez fournir les documents requis au format PDF, JPEG ou PNG (Max 5 Mo par fichier).</p>
+      </div>
+
+      <form id="upload-form" class="documents-form">
+        
+        <div class="upload-card">
+          <label class="doc-label">Acte de naissance ou Pièce d'identité *</label>
+          <div class="drop-zone" id="zone-id">
+            <span class="drop-icon">📄</span>
+            <span class="drop-text">Cliquez ou glissez le document ici</span>
+            <input type="file" id="file-id" class="file-input" accept=".pdf,.jpeg,.jpg,.png" required>
+            <div class="file-preview" id="preview-id"></div>
+          </div>
+        </div>
+
+        <div class="upload-card">
+          <label class="doc-label">Dernier bulletin de notes (Trimestre 3) *</label>
+          <div class="drop-zone" id="zone-bulletin">
+            <span class="drop-icon">📊</span>
+            <span class="drop-text">Cliquez ou glissez le bulletin ici</span>
+            <input type="file" id="file-bulletin" class="file-input" accept=".pdf,.jpeg,.jpg,.png" required>
+            <div class="file-preview" id="preview-bulletin"></div>
+          </div>
+        </div>
+
+        <div class="upload-card">
+          <label class="doc-label">Photo d'identité (Optionnel)</label>
+          <div class="drop-zone" id="zone-photo">
+            <span class="drop-icon">📸</span>
+            <span class="drop-text">Prendre ou choisir une photo</span>
+            <input type="file" id="file-photo" class="file-input" accept=".jpeg,.jpg,.png">
+            <div class="file-preview" id="preview-photo"></div>
+          </div>
+        </div>
+
+        <div class="actions-section">
+          <a href="../pages/paiement.html" class="btn btn-primary">Valider mon dossier</a>
+          <a href="../pages/dashboard1.html" class="btn-back">Plus tard, retourner au tableau de bord</a>
+        </div>
+      </form>
+    </main>
+
+  </div>
+
+</body>
+</html>
