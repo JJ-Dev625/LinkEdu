@@ -1,76 +1,114 @@
+
+
 document.addEventListener("DOMContentLoaded", () => {
   
-  const banner = document.querySelector(".restriction-banner");
-  const lockedElements = document.querySelectorAll(".locked");
-  const userRole = document.querySelector(".user-role");
-  const bannerBtn = document.querySelector(".banner-btn");
-
-  // 1. FONCTION QUI DÉBLOQUE TOUT L'ÉCRAN DYNAMIQUEMENT
-  function debloquerDashboard() {
-    // Masquer le bandeau de restriction
-    if (banner) banner.style.display = "none";
-    
-    // Mettre à jour le badge de statut de l'élève en vert
-    if (userRole) {
-      userRole.textContent = "Élève • Trimestre 1";
-      userRole.style.backgroundColor = "#E6F7F0";
-      userRole.style.color = "#10B881";
-    }
-
-    // Retirer le flou et supprimer les overlays de cadenas
-    lockedElements.forEach(el => {
-      el.classList.remove("locked");
-      const overlay = el.querySelector(".locked-overlay");
-      if (overlay) overlay.remove();
-    });
-
-    console.log("🔓 LinkEdu : Situation régularisée. Dashboard débloqué !");
-  }
-
-  // 2. VÉRIFICATION DU STATUT EN MÉMOIRE (LOCALSTORAGE)
-  const statut = localStorage.getItem("statutReinscription");
+  // 1. ÉLÉMENTS DE CONTRÔLE
+  const banner = document.getElementById("restriction-banner");
+  const bannerTitle = document.getElementById("banner-title");
+  const bannerSubtitle = document.getElementById("banner-subtitle");
+  const bannerBtn = document.getElementById("banner-action-btn");
+  const statusBadge = document.getElementById("user-status-badge");
   
-  if (statut === "valide") {
-    // Si l'élève a payé, on applique directement le déblocage
-    debloquerDashboard();
+  // Les sections à cibler pour le blocage temporel
+  const sectionStats = document.getElementById("section-stats");
+  const sectionSchedule = document.getElementById("section-schedule");
+
+  // 2. DATE TARGET DE LA RENTRÉE AU GABON (28 Septembre 2026 à 08h00)
+  const dateRentree = new Date("September 28, 2026 08:00:00").getTime();
+
+  // 3. LOGIQUE : APPLIQUER LE VERROUILLAGE STRICT
+  function appliquerVerrouillageStrict() {
+    // Modifier le bandeau en mode urgent (Rouge)
+    if (banner) {
+      banner.style.display = "flex";
+      banner.classList.add("banner-urgent");
+      if (bannerTitle) bannerTitle.textContent = "Accès Restreint !";
+      if (bannerSubtitle) bannerSubtitle.textContent = "Date limite dépassée. Régularisez votre scolarité.";
+    }
+
+    // Muter le badge de profil
+    if (statusBadge) {
+      statusBadge.textContent = "Situation : Non réinscrit";
+      statusBadge.className = "user-role status-bloque";
+    }
+
+    // Appliquer le flou et insérer l'overlay sur les stats
+    if (sectionStats && !sectionStats.classList.contains("locked")) {
+      sectionStats.classList.add("locked");
+      const overlay = document.createElement("div");
+      overlay.className = "locked-overlay";
+      overlay.innerHTML = "<span>🔒 Contenu Verrouillé</span>";
+      sectionStats.appendChild(overlay);
+    }
+
+    // Appliquer le flou et insérer l'overlay sur l'emploi du temps
+    if (sectionSchedule && !sectionSchedule.classList.contains("locked")) {
+      sectionSchedule.classList.add("locked");
+      const overlay = document.createElement("div");
+      overlay.className = "locked-overlay";
+      overlay.innerHTML = "<span>🔒 Emploi du temps indisponible</span>";
+      sectionSchedule.appendChild(overlay);
+    }
   }
 
-  // 3. SÉCURITÉ : ALERTE VISUELLE SI ON CLIQUE SUR UN MODULE BLOQUÉ
-  const lockedOverlays = document.querySelectorAll(".locked-overlay");
-  lockedOverlays.forEach(overlay => {
-    overlay.addEventListener("click", (e) => {
-      e.preventDefault();
-      
-      // Fait clignoter le bouton "Régler" pour guider l'utilisateur
-      if (bannerBtn) {
-        bannerBtn.style.transform = "scale(1.12)";
-        bannerBtn.style.backgroundColor = "#EF4444";
-        bannerBtn.style.transition = "all 0.2s ease";
+  // 4. LOGIQUE : ACCÈS LIBRE (AVANT LA RENTRÉE)
+  function gererPeriodeGrace(tempsRestantTexte) {
+    const aDejaPaye = localStorage.getItem("statutReinscription") === "valide";
 
-        setTimeout(() => {
-          bannerBtn.style.transform = "";
-          bannerBtn.style.backgroundColor = "";
-        }, 500);
+    if (aDejaPaye) {
+      // Si l'élève est à jour, pas besoin de l'embêter avec le compte à rebours
+      if (banner) banner.style.display = "none";
+      if (statusBadge) {
+        statusBadge.textContent = "Élève • Statut : À jour";
+        statusBadge.className = "user-role status-valide";
       }
-    });
-  });
+    } else {
+      // Toujours accessible mais affichage du compte à rebours ambré d'avertissement
+      if (banner) {
+        banner.style.display = "flex";
+        banner.classList.remove("banner-urgent");
+        if (bannerTitle) bannerTitle.textContent = "Réinscription 2026-2027 en cours";
+        if (bannerSubtitle) bannerSubtitle.innerHTML = ⏳ Prochaine rentrée dans : <strong>${tempsRestantTexte}</strong>.;
+      }
+      if (statusBadge) {
+        statusBadge.textContent = "Élève • Statut : En attente";
+        statusBadge.className = "user-role"; // Style neutre d'origine
+      }
+    }
+  }
 
-  // 4. MODE PHASE DE TEST : TOUCHES DU CLAVIER
-  document.addEventListener("keydown", (e) => {
-    // Touche 'P' pour forcer le déblocage manuel sans passer par le paiement
-    if (e.key.toLowerCase() === "p") {
-      localStorage.setItem("statutReinscription", "valide");
-      debloquerDashboard();
-    }
+  // 5. BOUTON DU COMPTE À REBOURS TEMPS RÉEL
+  const timer = setInterval(() => {
+    const maintenant = new Date().getTime();
+    const distance = dateRentree - maintenant;
+
+    // Calcul mathématique des jours, heures et minutes
+    const jours = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const heures = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     
-    // Touche 'R' pour RÉINITIALISER (Re-bloquer le système pour une nouvelle démo)
-    if (e.key.toLowerCase() === "r") {
-      localStorage.removeItem("statutReinscription");
-      window.location.reload(); // Recharge la page pour tout re-verrouiller
-      console.log("🔄 Mode Test : Statut réinitialisé, dashboard verrouillé.");
+    const texteTemps = ${jours}j ${heures}h ${minutes}m;
+
+    const aDejaPaye = localStorage.getItem("statutReinscription") === "valide";
+
+    // Si le paiement est détecté en cours de route
+    if (aDejaPaye) {
+      clearInterval(timer);
+      if (banner) banner.style.display = "none";
+      if (statusBadge) {
+        statusBadge.textContent = "Élève • Statut : À jour";
+        statusBadge.className = "user-role status-valide";
+      }
+      return;
     }
-  });
+
+    // Aiguillage selon la date
+    if (distance < 0) {
+      clearInterval(timer);
+      appliquerVerrouillageStrict();
+    } else {
+      gererPeriodeGrace(texteTemps);
+    }
+  }, 1000);
 
 });
-
-

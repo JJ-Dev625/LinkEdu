@@ -1,0 +1,224 @@
+/* ==========================================================================
+   1. STYLES GÉNÉRAUX & RESPONSIVE
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #1F2937;
+  background-color: #F9FAFB;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  min-height: 100vh;
+}
+
+.login-container {
+  width: 100%;             
+  max-width: 450px;        
+  padding: 40px 24px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  min-height: 100vh;
+}
+
+/* Encapsulation propre sur grand écran pour garder l'esprit "App Mobile" */
+@media (min-height: 700px) {
+  .login-container {
+    min-height: auto;
+    border-radius: 16px;
+  }
+}
+
+/* ==========================================================================
+   2. EN-TÊTE DE LA PAGE (LOGO & TITRE INSTITUTIONNEL)
+   ========================================================================== */
+.login-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-logo {
+  height: 65px;
+  width: auto;
+  margin-bottom: 8px;
+  object-fit: contain;
+}
+
+.login-header h2 {
+  font-size: 24px;
+  color: #1F3962;
+  font-weight: 800;
+}
+
+.login-header h2 span {
+  color: #10B881; /* Le vert emblématique de LinkEdu */
+}
+
+.login-header p {
+  font-size: 13px;
+  color: #6B7280;
+}
+
+/* ==========================================================================
+   3. CONFIGURATION DU FORMULAIRE ET DES INPUTS
+   ========================================================================== */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Icônes de gauche (Utilisateur et Cadenas) */
+.input-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 16px;
+  color: #9CA3AF;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 14px 44px 14px 42px; /* Marges intérieures calculées pour les deux icônes */
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: #F9FAFB;
+  transition: all 0.2s ease;
+  color: #1F2937;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: #1F3962;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(31, 57, 98, 0.08);
+}
+
+/* L'option de récupération de compte */
+.forgot-password {
+  font-size: 12px;
+  color: #1F3962;
+  text-decoration: none;
+  font-weight: 500;
+  align-self: flex-end;
+  margin-top: 4px;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   4. INTÉGRATION & ANIMATION DE L'ŒIL FONT AWESOME
+   ========================================================================== */
+.toggle-password-btn {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 4px;
+}
+
+/* Comportement de l'icône Font Awesome */
+.toggle-password-btn i {
+  font-size: 16px;
+  color: #9CA3AF; /* Gris neutre par défaut */
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.toggle-password-btn:hover i {
+  color: #4B5563; /* Légèrement plus foncé au survol */
+}
+
+.toggle-password-btn:active i {
+  transform: scale(0.9); /* Effet d'enfoncement au clic */
+}
+
+/* État actif : Quand le mot de passe est affiché (Bleu institutionnel) */
+.toggle-password-btn.active i {
+  color: #1F3962;
+}
+
+/* ==========================================================================
+   5. BOUTON D'ACTION ET BANDEAU D'ERREUR
+   ========================================================================== */
+.btn-submit {
+  background-color: #1F3962;
+  color: #FFFFFF;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  background-color: #152846;
+}
+
+.error-box {
+  background-color: #FEE2E2;
+  color: #EF4444;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border-left: 4px solid #EF4444;
+}
+
+/* ==========================================================================
+   6. ZONE INFORMATIVE DU BAS (FOOTER)
+   ========================================================================== */
+.login-footer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 11px;
+  color: #9CA3AF;
+}
+
+.version-tag {
+  font-weight: 600;
+  color: #D1D5DB;
+}
