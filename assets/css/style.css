@@ -1,0 +1,328 @@
+/* ==========================================================================
+   1. CONFIGURATION DES VARIABLES & DESIGN SYSTEM
+   ========================================================================== */
+:root {
+  --primary-vert: #10B881;
+  --dark-bleu: #1F3962;
+  --neutral-gray: #9CA3AF;
+  --dark-gray: #4B5563;
+  --white: #FFFFFF;
+  --black: #050505;
+  --orange-alert: #F59E0B;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: var(--dark-bleu);
+  color: var(--black);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   2. DIAPORAMA D'ARRIÈRE-PLAN
+   ========================================================================== */
+.background-slideshow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  overflow: hidden;
+}
+
+/* Voile d'ombrage léger (2px de flou) pour apprécier les arrières-plans */
+.slide-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(31, 57, 98, 0.50); 
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  z-index: -1;
+}
+
+/* ==========================================================================
+   3. HEADER AVEC EFFET NÉOMORPHISME (STYLE PME CONNECT)
+   ========================================================================== */
+.app-header {
+  background-color: var(--white); /* Fond blanc pur requis pour les ombres */
+  border-bottom: 2px solid rgba(16, 184, 129, 0.15);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.app-logo {
+  height: 50px;
+  width: auto;
+  border-radius: 14px; /* Coins adoucis type iOS */
+  background-color: var(--white);
+  padding: 6px;
+  
+  /* Double ombre néomorphique : relief sculpté */
+  box-shadow: 
+    4px 4px 10px rgba(0, 0, 0, 0.08), 
+    -4px -4px 10px rgba(255, 255, 255, 0.9),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.01);
+  
+  border: 1px solid rgba(229, 231, 235, 0.6);
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.app-logo:hover {
+  transform: scale(1.05);
+}
+
+.app-tagline {
+  color: var(--dark-bleu);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.app-footer {
+  background-color: rgba(15, 23, 42, 0.95);
+  color: var(--neutral-gray);
+  text-align: center;
+  padding: 12px;
+  font-size: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ==========================================================================
+   4. CONTENEUR PRINCIPAL & EFFET GLASSMORPHISM
+   ========================================================================== */
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  gap: 24px;
+  justify-content: center;
+  max-width: 440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.welcome-section {
+  text-align: center;
+  color: var(--white);
+}
+
+.welcome-section h1 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.welcome-section .text-brand {
+  color: var(--primary-vert);
+}
+
+.welcome-section p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  opacity: 0.95;
+}
+
+/* Formulaire à effet verre dépoli (S'adapte à l'arrière-plan changeant) */
+.auth-section {
+  background-color: rgba(255, 255, 255, 0.20); 
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.auth-section h3 {
+  color: var(--white); /* Blanc pour contraster sur le verre dépoli */
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.alert-box {
+  background-color: rgba(254, 243, 199, 0.95);
+  border-left: 4px solid var(--orange-alert);
+  color: #92400E;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-group {
+  margin-bottom: 16px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--white); /* Blanc pour la lisibilité */
+  margin-bottom: 6px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Champs translucides assortis au formulaire */
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.30);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s;
+  color: var(--white);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.input-wrapper input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.input-wrapper input:focus {
+  border-color: var(--primary-vert);
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0 3px rgba(16, 184, 129, 0.2);
+}
+
+.toggle-password {
+  position: absolute;
+  right: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.forgot-password {
+  display: block;
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--white);
+  text-decoration: none;
+  margin-top: -8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.forgot-password:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.btn-login {
+  width: 100%;
+  background-color: var(--dark-bleu);
+  color: var(--white);
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: 0 4px 12px rgba(31, 57, 98, 0.3);
+}
+
+.btn-login:hover {
+  background-color: #172B4D;
+}
+
+.signup-box {
+  margin-top: 20px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.25);
+  padding-top: 16px;
+  text-align: center;
+}
+
+.academic-year {
+  font-size: 0.8rem;
+  color: var(--orange-alert);
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-signup {
+  display: inline-block;
+  width: 100%;
+  background-color: var(--primary-vert);
+  color: var(--white);
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(16, 184, 129, 0.2);
+}
+
+.btn-signup:hover {
+  background-color: #0D9668;
+  transform: translateY(-1px);
+}
+
+.btn-subtext {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   5. ANIMATIONS
+   ========================================================================== */
+.slide-left {
+  animation: slideFromLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.slide-right {
+  animation: slideFromRight 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideFromLeft {
+  0% { opacity: 0; transform: translateX(-30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideFromRight {
+  0% { opacity: 0; transform: translateX(30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
