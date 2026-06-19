@@ -1,103 +1,187 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // ==========================================================================
-  // 1. SÉLECTION DES ÉLÉMENTS HTML (Synchronisés)
-  // ==========================================================================
-  const providerCards = document.querySelectorAll(".provider-card");
-  const phoneInput = document.getElementById("phone-input");
-  const paymentForm = document.getElementById("payment-form");
+  // ==========================================
+  // 1. DIAPORAMA D'ARRIÈRE-PLAN (10s)
+  // ==========================================
+  const slideshowContainer = document.getElementById("app-slideshow");
+  const imagesList = [
+    "../images/etu1.jpg",
+    "../images/etu2.jpg",
+    "../images/el1.jpg",
+    "../images/el2.jpg",
+    "../images/ens.jpg",
+    "../images/pri1.jpg",
+  ];
 
-  // Éléments de la boîte de dialogue (Modal)
-  const modalContainer = document.getElementById("payment-modal");
-  const modalStatus = document.getElementById("modal-status");
-  const pinForm = document.getElementById("pin-form");
-  const pinInput = document.getElementById("pin-input");
-  const cancelBtn = document.getElementById("cancel-btn");
+  if (slideshowContainer) {
+    let currentImageIndex = 0;
 
-  // Case à cocher "Réinscription"
+    imagesList.forEach((src, index) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.style.position = "absolute";
+      img.style.top = "0";
+      img.style.left = "0";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
+      img.style.objectPosition = "center";
+      img.style.opacity = index === 0 ? "1" : "0";
+      img.style.transition = "opacity 3.5s ease-in-out";
+      img.style.zIndex = "-2";
+      img.style.display = "block";
+      slideshowContainer.appendChild(img);
+    });
+
+    const firstImg = slideshowContainer.querySelector("img");
+    if (firstImg) {
+      if (firstImg.complete) {
+        startSlideshow();
+      } else {
+        firstImg.addEventListener("load", startSlideshow);
+      }
+    }
+
+    function startSlideshow() {
+      setInterval(() => {
+        const imgs = slideshowContainer.querySelectorAll("img");
+        if (imgs.length === 0) return;
+
+        imgs[currentImageIndex].style.opacity = "0";
+        currentImageIndex = (currentImageIndex + 1) % imagesList.length;
+        imgs[currentImageIndex].style.opacity = "1";
+      }, 10000);
+    }
+  }
+
+  // ==========================================
+  // 2. ADAPTATION DYNAMIQUE DES TARIFS FICTIFS
+  // ==========================================
+  const scolariteLabel = document.getElementById("scolarite-label");
+  const scolaritePrice = document.getElementById("scolarite-price");
+  const totalPrice = document.getElementById("total-price");
+
+  const pricingPlan = {
+    creche: { label: "Frais de scolarité (Crèche)", amount: "10 000 FCFA" },
+    primaire: { label: "Frais de scolarité (Primaire)", amount: "15 000 FCFA" },
+    secondaire: {
+      label: "Frais de scolarité (Collège / Lycée)",
+      amount: "25 000 FCFA",
+    },
+    superieur: {
+      label: "Frais de scolarité (Supérieur)",
+      amount: "50 000 FCFA",
+    },
+  };
+
+  const savedLevel = localStorage.getItem("selectedStudyLevel") || "secondaire";
+
+  if (pricingPlan[savedLevel]) {
+    if (scolariteLabel)
+      scolariteLabel.textContent = pricingPlan[savedLevel].label;
+    if (scolaritePrice)
+      scolaritePrice.textContent = pricingPlan[savedLevel].amount;
+    if (totalPrice) totalPrice.textContent = pricingPlan[savedLevel].amount;
+  }
+
+  // ==========================================
+  // 3. GESTION DES REINSCRIPTIONS
+  // ==========================================
   const checkboxReinscription = document.getElementById("is-reinscription");
   const matriculeContainer = document.getElementById("matricule-container");
 
-  let selectedProvider = "airtel"; // Par défaut
-
-  // ==========================================================================
-  // 1B. AFFICHAGE DYNAMIQUE DU CHAMP MATRICULE
-  // ==========================================================================
   if (checkboxReinscription && matriculeContainer) {
     checkboxReinscription.addEventListener("change", () => {
       if (checkboxReinscription.checked) {
-        matriculeContainer.style.display = "block";
+        matriculeContainer.style.display = "flex";
       } else {
         matriculeContainer.style.display = "none";
       }
     });
   }
 
-  // ==========================================================================
-  // 2. GESTION DU CHOIX DE L'OPÉRATEUR (AIRTEL / MOOV)
-  // ==========================================================================
+  // ==========================================
+  // 4. CHOIX DE L'OPÉRATEUR (AIRTEL / MOOV)
+  // ==========================================
+  const providerCards = document.querySelectorAll(".provider-card");
+  const phoneInput = document.getElementById("phone-input");
+  let selectedProvider = "airtel";
+
   providerCards.forEach((card) => {
     card.addEventListener("click", () => {
       providerCards.forEach((c) => c.classList.remove("active"));
       card.classList.add("active");
 
       selectedProvider = card.dataset.provider;
-
-      if (selectedProvider === "moov") {
-        phoneInput.placeholder = "065 xx xx xx";
-      } else {
-        phoneInput.placeholder = "077 xx xx xx";
-      }
+      phoneInput.placeholder =
+        selectedProvider === "moov" ? "Ex: 065 00 00 00" : "Ex: 077 00 00 00";
     });
   });
 
-  // ==========================================================================
-  // 3. SOUMISSION DU FORMULAIRE PRINCIPAL (TÉLÉPHONE)
-  // ==========================================================================
+  // ==========================================
+  // 5. DEMANDE DE PRÉLÈVEMENT AVEC CHARGEMENT RÉALISTE
+  // ==========================================
+  const paymentForm = document.getElementById("payment-form");
+  const modalContainer = document.getElementById("payment-modal");
+  const modalStatus = document.getElementById("modal-status");
+  const pinForm = document.getElementById("pin-form");
+  const pinInput = document.getElementById("pin-input");
+  const cancelBtn = document.getElementById("cancel-btn");
+
   if (paymentForm) {
     paymentForm.addEventListener("submit", (e) => {
-      e.preventDefault(); // Bloque la soumission HTML brute
-
+      e.preventDefault();
       const phoneNumber = phoneInput.value.trim();
 
       if (phoneNumber.length < 9) {
-        alert("Veuillez entrer un numéro de téléphone valide au Gabon.");
+        alert("Veuillez entrer un numéro de téléphone gabonais valide.");
         return;
       }
 
-      // Formatage du texte de l'opérateur pour l'affichage
       const operatorName =
         selectedProvider === "airtel" ? "Airtel Money" : "Moov Money";
+      const currentAmount = pricingPlan[savedLevel]
+        ? pricingPlan[savedLevel].amount
+        : "25 000 FCFA";
 
-      // Configuration initiale de la modale pour le PIN
+      // ÉTAPE A : Afficher d'abord la modale avec un écran de chargement réaliste
+      if (pinForm) pinForm.style.display = "none"; // On cache le formulaire de code PIN pour l'instant
+      modalContainer.classList.remove("hidden");
+
       modalStatus.innerHTML = `
-        <h3 style="color: #1F3962; font-weight: 800; font-size: 18px; margin-bottom: 6px;">Autorisation Requise</h3>
-        <p style="color: #6B7280; font-size: 13px; margin-bottom: 10px;">
-          Une demande de prélèvement via <strong>${operatorName}</strong> a été initiée vers le <strong>${phoneNumber}</strong>.
-        </p>
-        <p style="color: #4B5563; font-size: 12px; font-weight: 600; margin-bottom: 15px;">
-          Entrez votre code PIN secret à 4 chiffres :
-        </p>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0;">
+          <div class="spinner"></div>
+          <h3 style="color: #1F3962; font-weight: 700; font-size: 14px; margin-bottom: 4px;">Initialisation de la transaction</h3>
+          <p style="color: #6B7280; font-size: 11px;">Création de la demande vers le réseau mobile...</p>
+        </div>
       `;
 
-      // Rendre visible le formulaire de PIN interne
-      if (pinForm) pinForm.style.display = "block";
+      // ÉTAPE B : Après une attente de 2.5 secondes, on affiche la demande de PIN
+      setTimeout(() => {
+        modalStatus.innerHTML = `
+          <h3 style="color: #1F3962; font-weight: 800; font-size: 16px; margin-bottom: 6px;">Autorisation Requise</h3>
+          <p style="color: #6B7280; font-size: 12px; margin-bottom: 8px;">
+            Demande de prélèvement de <strong>${currentAmount}</strong> via <strong>${operatorName}</strong> vers le <strong>${phoneNumber}</strong>.
+          </p>
+          <p style="color: #4B5563; font-size: 11px; font-weight: 600; margin-bottom: 12px;">
+            Entrez votre code PIN secret à 4 chiffres :
+          </p>
+        `;
 
-      // Ouvrir la boîte de dialogue en retirant ".hidden"
-      modalContainer.classList.remove("hidden");
-      if (pinInput) {
-        pinInput.value = "";
-        pinInput.focus();
-      }
+        if (pinForm) {
+          pinForm.style.display = "flex"; // Faire réapparaître la saisie du PIN
+          pinInput.value = "";
+          pinInput.focus();
+        }
+      }, 2500); // 2.5 secondes d'attente réseau simulée
     });
   }
 
-  // ==========================================================================
-  // 4. VALIDATION DU CODE PIN & SIMULATION DU LIEN BANCAIRE
-  // ==========================================================================
+  // ==========================================
+  // 6. SIMULATION DE VALIDATION RÉSEAU PIN (SUCCÈS)
+  // ==========================================
   if (pinForm) {
     pinForm.addEventListener("submit", (e) => {
       e.preventDefault();
-
       const pin = pinInput.value.trim();
 
       if (pin.length !== 4 || isNaN(pin)) {
@@ -105,42 +189,32 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Cacher les boutons et la saisie pour mettre le chargement
       pinForm.style.display = "none";
 
-      // Injecter le Spinner de chargement
       modalStatus.innerHTML = `
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 0;">
-          <div class="spinner"></div>
-          <h3 style="color: #1F3962; font-weight: 700; font-size: 16px; margin-bottom: 4px;">Traitement en cours...</h3>
-          <p style="color: #6B7280; font-size: 12px;">Validation de la transaction avec l'opérateur...</p>
-        </div>
+        <div class="spinner"></div>
+        <h3 style="color: #1F3962; font-weight: 700; font-size: 14px; margin-bottom: 4px;">Traitement en cours...</h3>
+        <p style="color: #6B7280; font-size: 11px;">Validation réseau de la transaction...</p>
       `;
 
-      // Simuler 3 secondes d'attente réseau
       setTimeout(() => {
         modalStatus.innerHTML = `
-          <div class="success-icon" style="animation: popCheck 0.4s ease;">✓</div>
-          <h3 style="color: #1F3962; font-weight: 800; font-size: 20px; margin-bottom: 8px;">Paiement Réussi !</h3>
-          <p style="color: #4B5563; font-size: 13px; line-height: 1.5;">
-            Frais de scolarité enregistrés. Votre espace *LinkEdu* est désormais activé pour la nouvelle année.
+          <div class="success-icon">✓</div>
+          <h3 style="color: #1F3962; font-weight: 800; font-size: 18px; margin-bottom: 6px;">Paiement Réussi !</h3>
+          <p style="color: #4B5563; font-size: 12px; line-height: 1.4;">
+            Scolarité enregistrée avec succès. Votre accès **LinkEdu** est désormais activé.
           </p>
         `;
 
-        // Écriture de la validation en mémoire de session
-        localStorage.setItem("statutReinscription", "valide");
+        localStorage.setItem("statutInscription", "paye");
 
-        // Redirection finale vers l'accueil du Dashboard
         setTimeout(() => {
           window.location.href = "./dashboard1.html";
-        }, 3000);
+        }, 2500);
       }, 3000);
     });
   }
 
-  // ==========================================================================
-  // 5. BOUTON ANNULER
-  // ==========================================================================
   if (cancelBtn) {
     cancelBtn.addEventListener("click", () => {
       modalContainer.classList.add("hidden");

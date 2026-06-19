@@ -6,77 +6,78 @@ document.addEventListener("DOMContentLoaded", () => {
   localStorage.setItem("userStudyLevel", "Licence 2"); 
   localStorage.setItem("userMatricule", "LE-2026-0941");
 
-  // Éléments de l'interface
+  // Éléments UI
   const banner = document.getElementById("promo-banner");
   const timerDisplay = document.getElementById("countdown-timer");
-  const userRole = document.getElementById("user-status");
   const bannerBtn = document.querySelector(".banner-btn");
+  const libraryGrid = document.getElementById("sec-library");
   
   // Boutons de simulation de la Démo
   const btnSimFree = document.getElementById("btn-sim-free");
   const btnSimLocked = document.getElementById("btn-sim-locked");
 
-  const sectionsToLock = [
-    { id: "sec-stats", text: "🔒 Contenu Verrouillé" },
-    { id: "sec-downloads", text: "🔒 Documents indisponibles" },
-    { id: "sec-schedule", text: "🔒 Emploi du temps indisponible" }
-  ];
+  // Filtres d'onglets
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  const courseCards = document.querySelectorAll(".course-card");
 
-  // DATE CIBLE DE LA RENTRÉE : 28 Septembre 2026 à 00:00:00
+  // DATE DE RENTRÉE (IDENTIQUE AU DASHBOARD)
   const targetDate = new Date("September 28, 2026 00:00:00").getTime();
   let countdownInterval = null;
 
   // ==========================================
-  // A. ACTIONS VISUELLES (VERROU / ACCÈS TOTAL)
+  // 1. LOGIQUE DE FILTRAGE DES COURS
   // ==========================================
-  function verrouillerDashboard() {
+  filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      filterButtons.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      const filterValue = button.getAttribute("data-filter");
+
+      courseCards.forEach(card => {
+        if (filterValue === "all" || card.getAttribute("data-type") === filterValue) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
+
+  // ==========================================
+  // 2. LOGIQUE DE SÉCURITÉ ET RESTRICTION
+  // ==========================================
+  function verrouillerBibliotheque() {
     if (timerDisplay) timerDisplay.textContent = "Expiré 🛑";
     if (banner) {
       banner.style.background = "linear-gradient(135deg, #FEE2E2 0%, #FCA5A5 100%)";
       banner.style.borderColor = "#EF4444";
     }
-    if (userRole) {
-      userRole.textContent = "Élève • Accès Restreint";
-      userRole.style.backgroundColor = "#FEE2E2";
-      userRole.style.color = "#EF4444";
+
+    if (libraryGrid && !libraryGrid.classList.contains("locked")) {
+      libraryGrid.classList.add("locked");
+      
+      const overlay = document.createElement("div");
+      overlay.className = "locked-overlay";
+      overlay.innerHTML = `<span>🔒 Médiathèque verrouillée. Régularisez vos frais.</span>`;
+      libraryGrid.appendChild(overlay);
+
+      overlay.addEventListener("click", triggerAlertAnimation);
     }
-
-    sectionsToLock.forEach(sec => {
-      const element = document.getElementById(sec.id);
-      if (element && !element.classList.contains("locked")) {
-        element.classList.add("locked");
-        
-        const overlay = document.createElement("div");
-        overlay.className = "locked-overlay";
-        overlay.innerHTML = `<span>${sec.text}</span>`;
-        element.appendChild(overlay);
-
-        overlay.addEventListener("click", triggerAlertAnimation);
-      }
-    });
   }
 
-  function appliquerAccesTotal(estInscrit = false) {
+  function débloquerBibliotheque(estInscrit = false) {
     if (banner) banner.style.display = estInscrit ? "none" : "flex";
     if (banner && !estInscrit) {
       banner.style.background = ""; 
       banner.style.borderColor = "";
     }
-    
-    if (userRole) {
-      userRole.textContent = estInscrit ? "Élève • Trimestre 1 (Inscrit)" : "Élève • Statut : En attente";
-      userRole.style.backgroundColor = estInscrit ? "#E6F7F0" : "#F3F4F6";
-      userRole.style.color = estInscrit ? "#10B881" : "#6B7280";
-    }
 
-    sectionsToLock.forEach(sec => {
-      const element = document.getElementById(sec.id);
-      if (element) {
-        element.classList.remove("locked");
-        const overlay = element.querySelector(".locked-overlay");
-        if (overlay) overlay.remove();
-      }
-    });
+    if (libraryGrid) {
+      libraryGrid.classList.remove("locked");
+      const overlay = libraryGrid.querySelector(".locked-overlay");
+      if (overlay) overlay.remove();
+    }
   }
 
   function triggerAlertAnimation(e) {
@@ -93,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================
-  // B. COMPTE À REBOURS RÉEL
+  // 3. COMPTE À REBOURS ET INTERCONNEXION STORAGE
   // ==========================================
   function initRealCountdown() {
     if (countdownInterval) clearInterval(countdownInterval);
@@ -104,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (distance < 0 || localStorage.getItem("demoForceState") === "locked") {
         clearInterval(countdownInterval);
-        verrouillerDashboard();
+        verrouillerBibliotheque();
       } else {
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -118,34 +119,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   }
 
-  // ==========================================
-  // C. BOUTONS DE SIMULATION DE LA DÉMO
-  // ==========================================
+  // Événements boutons démo du jury
   btnSimFree.addEventListener("click", () => {
     localStorage.setItem("demoForceState", "free");
-    localStorage.removeItem("statutReinscription"); 
-    appliquerAccesTotal(false);
-    initRealCountdown(); 
+    localStorage.removeItem("statutReinscription");
+    débloquerBibliotheque(false);
+    initRealCountdown();
   });
 
   btnSimLocked.addEventListener("click", () => {
     localStorage.setItem("demoForceState", "locked");
     clearInterval(countdownInterval);
-    verrouillerDashboard();
+    verrouillerBibliotheque();
   });
 
-  // ==========================================
-  // D. INITIALISATION AU CHARGEMENT
-  // ==========================================
+  // Analyse du statut au chargement
   const currentSavedState = localStorage.getItem("demoForceState");
   const paiementValide = localStorage.getItem("statutReinscription");
 
   if (paiementValide === "valide") {
-    appliquerAccesTotal(true);
+    débloquerBibliotheque(true);
   } else if (currentSavedState === "locked") {
-    verrouillerDashboard();
+    verrouillerBibliotheque();
   } else {
-    appliquerAccesTotal(false);
+    débloquerBibliotheque(false);
     initRealCountdown();
   }
 });
