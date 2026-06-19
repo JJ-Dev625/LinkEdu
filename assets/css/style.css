@@ -21,11 +21,13 @@
 body {
   background-color: var(--dark-bleu);
   color: var(--black);
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow-x: hidden;
+  overflow: hidden; /* Verrouille l'écran en mode Web App */
 }
 
 /* ==========================================================================
@@ -41,7 +43,6 @@ body {
   overflow: hidden;
 }
 
-/* Voile d'ombrage léger (2px de flou) pour apprécier les arrières-plans */
 .slide-overlay {
   position: absolute;
   top: 0;
@@ -55,43 +56,35 @@ body {
 }
 
 /* ==========================================================================
-   3. HEADER AVEC EFFET NÉOMORPHISME (STYLE PME CONNECT)
+   3. HEADER / FOOTER APPLICATION
    ========================================================================== */
 .app-header {
-  background-color: var(--white); /* Fond blanc pur requis pour les ombres */
+  background-color: var(--white);
   border-bottom: 2px solid rgba(16, 184, 129, 0.15);
-  padding: 14px 20px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
 }
 
 .app-logo {
-  height: 50px;
+  height: 42px;
   width: auto;
-  border-radius: 14px; /* Coins adoucis type iOS */
+  border-radius: 10px;
   background-color: var(--white);
-  padding: 6px;
-  
-  /* Double ombre néomorphique : relief sculpté */
+  padding: 4px;
   box-shadow: 
-    4px 4px 10px rgba(0, 0, 0, 0.08), 
-    -4px -4px 10px rgba(255, 255, 255, 0.9),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.01);
-  
+    3px 3px 8px rgba(0, 0, 0, 0.08), 
+    -3px -3px 8px rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(229, 231, 235, 0.6);
   object-fit: contain;
-  transition: transform 0.3s ease;
-}
-
-.app-logo:hover {
-  transform: scale(1.05);
 }
 
 .app-tagline {
   color: var(--dark-bleu);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
@@ -100,24 +93,25 @@ body {
   background-color: rgba(15, 23, 42, 0.95);
   color: var(--neutral-gray);
   text-align: center;
-  padding: 12px;
-  font-size: 0.75rem;
+  padding: 8px;
+  font-size: 0.7rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
 }
 
 /* ==========================================================================
-   4. CONTENEUR PRINCIPAL & EFFET GLASSMORPHISM
+   4. CONTENEUR PRINCIPAL COMPACTÉ
    ========================================================================== */
 .main-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 24px 20px;
-  gap: 24px;
-  justify-content: center;
-  max-width: 440px;
+  justify-content: space-evenly;
+  padding: 12px 20px;
+  max-width: 420px;
   margin: 0 auto;
   width: 100%;
+  overflow: hidden;
 }
 
 .welcome-section {
@@ -126,8 +120,8 @@ body {
 }
 
 .welcome-section h1 {
-  font-size: 1.8rem;
-  margin-bottom: 8px;
+  font-size: 1.6rem;
+  margin-bottom: 4px;
   font-weight: 700;
 }
 
@@ -136,16 +130,18 @@ body {
 }
 
 .welcome-section p {
-  font-size: 0.95rem;
-  line-height: 1.4;
+  font-size: 0.85rem;
+  line-height: 1.3;
   opacity: 0.95;
+  max-width: 90%;
+  margin: 0 auto;
 }
 
-/* Formulaire à effet verre dépoli (S'adapte à l'arrière-plan changeant) */
+/* Formulaire à effet verre dépoli (Glassmorphism) */
 .auth-section {
-  background-color: rgba(255, 255, 255, 0.20); 
+  background-color: rgba(255, 255, 255, 0.18); 
   border-radius: 16px;
-  padding: 24px;
+  padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(12px);
@@ -153,38 +149,36 @@ body {
 }
 
 .auth-section h3 {
-  color: var(--white); /* Blanc pour contraster sur le verre dépoli */
-  font-size: 1.2rem;
-  margin-bottom: 20px;
+  color: var(--white);
+  font-size: 1.1rem;
+  margin-bottom: 14px;
   text-align: center;
   font-weight: 700;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .alert-box {
   background-color: rgba(254, 243, 199, 0.95);
   border-left: 4px solid var(--orange-alert);
   color: #92400E;
-  padding: 12px;
+  padding: 10px;
   border-radius: 6px;
-  margin-bottom: 16px;
-  font-size: 0.85rem;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .input-group {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .input-group label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--white); /* Blanc pour la lisibilité */
-  margin-bottom: 6px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  color: var(--white);
+  margin-bottom: 4px;
 }
 
 .input-wrapper {
@@ -199,27 +193,19 @@ body {
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* Champs translucides assortis au formulaire */
 .input-wrapper input {
   width: 100%;
-  padding: 12px 14px 12px 40px;
+  padding: 10px 14px 10px 40px;
   border: 1px solid rgba(255, 255, 255, 0.30);
   border-radius: 8px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   outline: none;
-  transition: all 0.2s;
   color: var(--white);
   background-color: rgba(255, 255, 255, 0.15);
 }
 
 .input-wrapper input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.input-wrapper input:focus {
-  border-color: var(--primary-vert);
-  background-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 0 0 3px rgba(16, 184, 129, 0.2);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .toggle-password {
@@ -233,18 +219,13 @@ body {
 .forgot-password {
   display: block;
   text-align: right;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--white);
   text-decoration: none;
-  margin-top: -8px;
-  margin-bottom: 20px;
+  margin-top: -6px;
+  margin-bottom: 16px;
   font-weight: 500;
   opacity: 0.85;
-}
-
-.forgot-password:hover {
-  opacity: 1;
-  text-decoration: underline;
 }
 
 .btn-login {
@@ -252,33 +233,26 @@ body {
   background-color: var(--dark-bleu);
   color: var(--white);
   border: none;
-  padding: 14px;
+  padding: 12px;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
-  box-shadow: 0 4px 12px rgba(31, 57, 98, 0.3);
-}
-
-.btn-login:hover {
-  background-color: #172B4D;
 }
 
 .signup-box {
-  margin-top: 20px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.25);
-  padding-top: 16px;
+  margin-top: 14px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  padding-top: 12px;
   text-align: center;
 }
 
 .academic-year {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--orange-alert);
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .btn-signup {
@@ -287,21 +261,14 @@ body {
   background-color: var(--primary-vert);
   color: var(--white);
   text-decoration: none;
-  padding: 12px;
+  padding: 10px;
   border-radius: 8px;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(16, 184, 129, 0.2);
-}
-
-.btn-signup:hover {
-  background-color: #0D9668;
-  transform: translateY(-1px);
 }
 
 .btn-subtext {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 400;
   opacity: 0.9;
 }
@@ -310,19 +277,19 @@ body {
    5. ANIMATIONS
    ========================================================================== */
 .slide-left {
-  animation: slideFromLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideFromLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .slide-right {
-  animation: slideFromRight 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideFromRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes slideFromLeft {
-  0% { opacity: 0; transform: translateX(-30px); }
+  0% { opacity: 0; transform: translateX(-20px); }
   100% { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes slideFromRight {
-  0% { opacity: 0; transform: translateX(30px); }
+  0% { opacity: 0; transform: translateX(20px); }
   100% { opacity: 1; transform: translateX(0); }
 }

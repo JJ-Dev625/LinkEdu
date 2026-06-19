@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // === 2. GESTION DU SOUUMIT FORMULAIRE ===
+  // === 2. GESTION DU SOUMIS FORMULAIRE ===
   const loginForm = document.querySelector(".login-form");
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // === 3. DIAPORAMA ROBUSTE PAR INJECTION D'ÉLÉMENTS ===
+  // === 3. DIAPORAMA AVEC CHEMINS GITHUB PAGES ET TIMINGS RALENTIS ===
   const slideshowContainer = document.getElementById("app-slideshow");
   const imagesList = [
     "assets/images/etu1.jpg",
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentImageIndex = 0;
 
-  // Injection forcée de chaque image dans le DOM pour parer les bugs de caches mobiles
+  // Injection des images avec un effet de fondu ultra doux (3.5 secondes)
   imagesList.forEach((src, index) => {
     const img = document.createElement("img");
     img.src = src;
@@ -56,13 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
     img.style.objectFit = "cover";
     img.style.objectPosition = "center";
     img.style.opacity = index === 0 ? "1" : "0";
-    img.style.transition = "opacity 1.5s ease-in-out";
+    img.style.transition = "opacity 3.5s ease-in-out"; /* Fondu très lent */
     img.style.zIndex = "-2";
     img.style.display = "block";
     slideshowContainer.appendChild(img);
   });
 
-  // Activation sécurisée une fois le premier visuel chargé
+  // Lancement du diaporama
   const firstImg = slideshowContainer.querySelector("img");
   if (firstImg) {
     if (firstImg.complete) {
@@ -77,14 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const imgs = slideshowContainer.querySelectorAll("img");
       if (imgs.length === 0) return;
 
-      // Masquage progressif de l'image courante
+      // Disparition en douceur de l'ancienne image
       imgs[currentImageIndex].style.opacity = "0";
 
-      // Passage à l'index suivant
+      // Passage à l'image suivante
       currentImageIndex = (currentImageIndex + 1) % imagesList.length;
 
-      // Affichage de la nouvelle image
+      // Apparition en douceur de la nouvelle image
       imgs[currentImageIndex].style.opacity = "1";
-    }, 5000); // Rotation toutes les 5 secondes
+    }, 10000); /* Chaque image reste visible pendant 10 secondes */
   }
 });
