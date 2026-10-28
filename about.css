@@ -1,0 +1,224 @@
+/* =================================================================
+   ABOUT.CSS — DESIGN ACCUEIL SYNCHRONISÉ (LIGHT / DARK)
+   =================================================================== */
+
+body.about-page {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+.nav-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--dropdown-hover);
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.nav-back-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+/* Layout principal de la page À propos */
+.main-about-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px 36px;
+  overflow-y: auto;
+}
+
+.about-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* En-tête */
+.about-hero-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.about-badge-dual {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 6px;
+}
+
+.icon-blue, .icon-blue-title {
+  color: var(--primary) !important;
+}
+
+.icon-green, .icon-green-title {
+  color: var(--success) !important;
+}
+
+.about-hero-header h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.about-hero-tagline {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Feuille de contenu unifiée (Style carte épurée) */
+.about-main-sheet {
+  background: var(--bg-wrapper);
+  border-radius: var(--card-radius);
+  padding: 24px 32px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+/* Blocs de texte */
+.about-block {
+  margin-bottom: 20px;
+}
+
+.about-block h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-main);
+}
+
+.about-block p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.section-text {
+  margin-bottom: 10px;
+}
+
+/* Grille des 4 piliers */
+.about-grid-balanced {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.about-mini-card {
+  background: var(--dropdown-hover);
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-mini-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.about-mini-card.border-blue {
+  border-left: 4px solid var(--primary);
+}
+
+.about-mini-card.border-green {
+  border-left: 4px solid var(--success);
+}
+
+.about-mini-card h3 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.about-mini-card p {
+  font-size: 0.78rem;
+  margin: 0;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+/* Appel à l'action (CTA) */
+.about-cta-box {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.04), rgba(5, 150, 105, 0.04));
+  border: 1px solid var(--border-color);
+  padding: 18px 24px;
+  border-radius: 16px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+body.dark-mode .about-cta-box {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.12), rgba(5, 150, 105, 0.12));
+}
+
+.about-cta-box h3 {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.about-cta-box p {
+  font-size: 0.82rem;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+}
+
+.about-btn-custom {
+  display: inline-block;
+  text-decoration: none;
+  background: var(--primary);
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.about-btn-custom:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* =================================================================
+   RESPONSIVE
+   =================================================================== */
+@media screen and (max-width: 768px) {
+  .about-grid-balanced {
+    grid-template-columns: 1fr;
+  }
+  
+  .main-about-section {
+    padding: 12px 16px;
+  }
+
+  .about-main-sheet {
+    padding: 16px 20px;
+  }
+}

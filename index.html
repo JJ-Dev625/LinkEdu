@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LinkEdu — Plateforme éducative unifiée de gestion scolaire et d'inscriptions.">
+  <title>LinkEdu — Accueil</title>
+  
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="accueil3.css">
+</head>
+<body class="single-screen-app">
+
+  <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+  <div class="app-viewport-wrapper">
+
+    <!-- 1. BANDEAU D'ANNONCES DYNAMIQUE -->
+    <aside class="announcements-ticker-container" aria-label="Annonces de la plateforme">
+      <div class="announcements-ticker-track" id="homeAnnouncementsTicker" role="region" aria-live="polite">
+        <span data-i18n="announcements_loading">Chargement des annonces...</span>
+      </div>
+    </aside>
+
+    <!-- 2. BARRE DE NAVIGATION SUPÉRIEURE -->
+    <header class="top-navbar" role="banner">
+      <div class="nav-left">
+        <button class="burger-btn" id="burgerToggle" aria-label="Ouvrir le menu de navigation" aria-expanded="false" aria-controls="burgerMenu">
+          <span class="burger-line" aria-hidden="true"></span>
+          <span class="burger-line" aria-hidden="true"></span>
+          <span class="burger-line" aria-hidden="true"></span>
+        </button>
+
+        <div class="logo-container">
+          <img src="./images/log1.png" alt="LinkEdu - Logo Mode Clair" class="auth-logo logo-light">
+          <img src="./images/log2.png" alt="LinkEdu - Logo Mode Sombre" class="auth-logo logo-dark">
+        </div>
+      </div>
+
+      <nav class="desktop-navbar" aria-label="Navigation principale">
+        <a href="apropos.html" class="nav-link"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> <span data-i18n="nav_about">À propos</span></a>
+        <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> <span data-i18n="nav_faq">FAQ</span></a>
+        <button type="button" class="nav-action-btn" id="langToggleDesktop" aria-label="Changer de langue">
+          <i class="fa-solid fa-globe" aria-hidden="true"></i> <span id="langTextDesktop">English</span>
+        </button>
+        <button type="button" class="nav-action-btn" id="darkModeToggleDesktop" aria-label="Basculer le thème clair ou sombre">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i> <span data-i18n="nav_theme">Thème</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- 3. ZONE HERO PRINCIPALE (MONOBLOC) -->
+    <main class="main-hero-section" id="main-content" role="main">
+      <div class="hero-container">
+        
+        <!-- BLOC GAUCHE : Format de la 1ère image (diplômés) + 4 éléments en ligne transparente en bas -->
+        <article class="hero-left-card" id="heroSlider" aria-label="Présentation de LinkEdu">
+          
+          <div class="hero-brand-top">
+            <div class="hero-badge">
+              <span data-i18n="hero_badge">L'excellence numérique à portée de main</span>
+            </div>
+          </div>
+
+          <div class="hero-brand-content">
+            <h1>LinkEdu</h1>
+            <p class="hero-desc" data-i18n="hero_desc">Plateforme unifiée de gestion scolaire, de suivi des dossiers et d'inscriptions.</p>
+          </div>
+
+          <!-- Les 4 éléments alignés horizontalement en bas, 100% transparents -->
+          <div class="hero-transparent-props">
+            <div class="transparent-prop-item">
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <div>
+                <h4 data-i18n="prop_sec_title">Sécurisé</h4>
+                <p data-i18n="prop_sec_desc">Données protégées</p>
+              </div>
+            </div>
+
+            <div class="transparent-prop-item">
+              <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+              <div>
+                <h4 data-i18n="prop_fast_title">Rapide</h4>
+                <p data-i18n="prop_fast_desc">Expérience fluide</p>
+              </div>
+            </div>
+
+            <div class="transparent-prop-item">
+              <i class="fa-solid fa-laptop" aria-hidden="true"></i>
+              <div>
+                <h4 data-i18n="prop_disp_title">Disponible</h4>
+                <p data-i18n="prop_disp_desc">Sur tous appareils</p>
+              </div>
+            </div>
+
+            <div class="transparent-prop-item">
+              <i class="fa-solid fa-heart" aria-hidden="true"></i>
+              <div>
+                <h4 data-i18n="prop_designed_title">Intuitif</h4>
+                <p data-i18n="prop_designed_desc">Pensé pour vous</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- BLOC DROIT : Connexion & Inscription -->
+        <aside class="hero-right-card" aria-label="Espace de connexion et inscription">
+          <div class="auth-sheet">
+            <div class="action-buttons-container">
+              
+             <!-- Bouton Connexion -->
+             <div class="dropdown-container">
+               <button type="button" class="btn-action-uniform btn-connexion-style" id="btnConnexionToggle">
+                 <span class="btn-text-content"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> <span data-i18n="btn_login">Se connecter à mon espace</span></span>
+                 <i class="fa-solid fa-chevron-down action-arrow" id="arrowConnexion" aria-hidden="true"></i>
+               </button>
+               
+               <div class="role-dropdown-menu" id="menuConnexion">
+                 <a href="connexion.html?role=eleve"><i class="fa-solid fa-user-graduate" aria-hidden="true"></i> <span data-i18n="role_student">Espace Élève</span></a>
+                 <a href="connexion.html?role=enseignant"><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i> <span data-i18n="role_teacher">Espace Enseignant</span></a>
+                 <a href="connexion.html?role=parent"><i class="fa-solid fa-user-group" aria-hidden="true"></i> <span data-i18n="role_parent">Espace Parent</span></a>
+                 <a href="connexion.html?role=admin"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> <span data-i18n="role_admin">Espace Administrateur</span></a>
+               </div>
+             </div>
+
+             <!-- Bouton Inscription -->
+             <div class="role-dropdown-container">
+               <button type="button" class="btn-action-uniform btn-inscription-style" id="btnInscriptionToggle">
+                 <span class="btn-text-content"><i class="fa-solid fa-user-plus" aria-hidden="true"></i> <span data-i18n="btn_register">S'inscrire maintenant</span></span>
+                 <i class="fa-solid fa-chevron-down action-arrow" id="arrowInscription" aria-hidden="true"></i>
+               </button>
+               
+               <div class="role-dropdown-menu" id="menuInscription">
+                 <a href="inscription.html?role=eleve"><i class="fa-solid fa-user-graduate" aria-hidden="true"></i> <span data-i18n="role_student">Espace Élève</span></a>
+                 <a href="inscription.html?role=parent"><i class="fa-solid fa-user-group" aria-hidden="true"></i> <span data-i18n="role_parent_guardian">Espace Parent / Tuteur</span></a>
+               </div>
+             </div>
+
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </main>
+
+    <!-- 4. FOOTER GLOBAL -->
+    <footer class="page-footer">
+      <p>© 2026 LinkEdu — <span data-i18n="footer_credits">Développé par Jean Junior DIRAMBA MAMBOUNDOU | Apprenti dev à l'École 241 (Bikélé, Gabon)</span></p>
+    </footer>
+
+  </div>
+
+  <!-- MENU BURGER MOBILE -->
+  <nav class="burger-menu" id="burgerMenu" aria-label="Menu mobile" aria-hidden="true">
+    <div class="burger-header">
+      <h3 data-i18n="burger_title">LinkEdu Navigation</h3>
+      <button class="close-burger" id="burgerClose" aria-label="Fermer le menu">&times;</button>
+    </div>
+    
+    <div class="burger-links-container">
+      <a href="apropos.html" class="burger-card-item">
+        <div class="burger-icon-wrap icon-blue"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></div>
+        <span data-i18n="nav_about_full">À propos de LinkEdu</span>
+      </a>
+
+      <a href="faq.html" class="burger-card-item">
+        <div class="burger-icon-wrap icon-green"><i class="fa-solid fa-circle-question" aria-hidden="true"></i></div>
+        <span data-i18n="nav_faq_help">FAQ & Aide</span>
+      </a>
+
+      <div class="burger-section-title" data-i18n="burger_settings">Paramètres</div>
+
+      <a href="#" id="darkModeToggle" class="burger-card-item">
+        <div class="burger-icon-wrap icon-dark"><i class="fa-solid fa-moon" aria-hidden="true"></i></div>
+        <span data-i18n="nav_theme_full">Mode Sombre / Clair</span>
+      </a>
+
+      <a href="#" id="langToggleBurger" class="burger-card-item">
+        <div class="burger-icon-wrap icon-globe"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+        <span id="langTextBurger">Langue : Français</span>
+      </a>
+    </div>
+  </nav>
+  <div class="burger-overlay" id="burgerOverlay" tabindex="-1"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

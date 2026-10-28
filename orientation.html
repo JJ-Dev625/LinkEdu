@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LinkEdu — Dossier & Orientation académique.">
+  <title>LinkEdu — Dossier & Orientation</title>
+  
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Feuilles de style -->
+  <link rel="stylesheet" href="accueil3.css">
+  <link rel="stylesheet" href="orientation.css">
+</head>
+<body class="orientation-page">
+
+  <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+  <div class="app-viewport-wrapper">
+
+    <!-- 1. BANDEAU D'ANNONCES DYNAMIQUE -->
+    <aside class="announcements-ticker-container" aria-label="Annonces de la plateforme">
+      <div class="announcements-ticker-track" id="homeAnnouncementsTicker" role="region" aria-live="polite">
+        <span data-i18n="announcements_loading">Chargement des annonces...</span>
+      </div>
+    </aside>
+
+    <!-- 2. BARRE DE NAVIGATION SUPÉRIEURE (UNIFIÉE) -->
+    <header class="top-navbar" role="banner">
+      <div class="nav-left">
+        <a href="inscription.html" class="nav-back-btn" aria-label="Retour à l'inscription">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+        </a>
+
+        <div class="logo-container">
+          <img src="./images/log1.png" alt="LinkEdu - Logo Mode Clair" class="auth-logo logo-light">
+          <img src="./images/log2.png" alt="LinkEdu - Logo Mode Sombre" class="auth-logo logo-dark">
+        </div>
+      </div>
+
+      <nav class="desktop-navbar" aria-label="Navigation secondaire">
+        <a href="apropos.html" class="nav-link"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> <span data-i18n="nav_about">À propos</span></a>
+        <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> <span data-i18n="nav_faq">FAQ</span></a>
+        <button type="button" class="nav-action-btn" id="langToggleDesktop" aria-label="Changer de langue">
+          <i class="fa-solid fa-globe" aria-hidden="true"></i> <span id="langTextDesktop">English</span>
+        </button>
+        <button type="button" class="nav-action-btn" id="darkModeToggleDesktop" aria-label="Basculer le thème clair ou sombre">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i> <span data-i18n="nav_theme">Thème</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- 3. CONTENU PRINCIPAL DE L'ORIENTATION -->
+    <main class="main-orientation-section" id="main-content" role="main">
+      <div class="orientation-container">
+        
+        <article class="orientation-main-card">
+          
+          <!-- En-tête avec image dynamique gérée via JS (classes role-eleve-bg / role-parent-bg) -->
+          <div class="orientation-hero-header" id="orientationHeroHeader">
+            <div class="role-icon-badge">
+              <i id="orientationIcon" class="fa-solid fa-file-arrow-up" aria-hidden="true"></i>
+            </div>
+            <h1 id="orientationTitle" data-i18n="orient_title">Compléter mon Dossier</h1>
+            <p id="orientationSubtitle" class="hero-desc" data-i18n="orient_subtitle">Informations académiques et pièces justificatives.</p>
+          </div>
+
+          <!-- Barre de progression visuelle (Étape 2/3 active) -->
+          <div class="signup-progress-bar" aria-label="Étape 2 sur 3">
+            <div class="progress-step active" id="stepIndicator1"></div>
+            <div class="progress-step active" id="stepIndicator2"></div>
+            <div class="progress-step" id="stepIndicator3"></div>
+          </div>
+
+          <!-- Formulaire principal -->
+          <form class="orientation-form-body" id="upload-form">
+            
+            <!-- Ligne 1 : Niveau d'études & École de provenance -->
+            <div class="form-grid-2">
+              <div class="input-group">
+                <label for="study-level" class="input-label" data-i18n="label_study_level">Niveau d'études *</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-layer-group input-icon" aria-hidden="true"></i>
+                  <select id="study-level" class="form-select" required>
+                    <option value="" disabled selected data-i18n="option_choose">Choisir...</option>
+                    <option value="prescolaire" data-i18n="level_prescolaire">Préscolaire</option>
+                    <option value="primaire" data-i18n="level_primaire">Primaire</option>
+                    <option value="secondaire" data-i18n="level_secondaire">Secondaire</option>
+                    <option value="superieur" data-i18n="level_superieur">Supérieur</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="school-origin" class="input-label" data-i18n="label_school_origin">École de provenance *</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-school input-icon" aria-hidden="true"></i>
+                  <input type="text" id="school-origin" placeholder="ex: École 241 / Lycée..." required class="form-input" data-i18n-placeholder="placeholder_school_origin">
+                </div>
+              </div>
+            </div>
+
+            <!-- Ligne 2 : Classe précédente & Classe demandée -->
+            <div class="form-grid-2">
+              <div class="input-group">
+                <label for="prev-class" class="input-label" data-i18n="label_prev_class">Classe précédente *</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-arrow-left-long input-icon" aria-hidden="true"></i>
+                  <select id="prev-class" class="form-select" required disabled>
+                    <option value="" disabled selected data-i18n="option_select">Sélectionner...</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="target-class" class="input-label" data-i18n="label_target_class">Classe demandée *</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-graduation-cap input-icon" aria-hidden="true"></i>
+                  <select id="target-class" class="form-select" required disabled>
+                    <option value="" disabled selected data-i18n="option_select">Sélectionner...</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ligne 3 : Filière (Dynamique selon le niveau) -->
+            <div class="input-group" id="filiereContainer" style="display: none;">
+              <label for="filiereSelect" class="input-label" data-i18n="label_filiere">Filière / Série souhaitée *</label>
+              <div class="input-field-wrapper">
+                <i class="fa-solid fa-book-open input-icon" aria-hidden="true"></i>
+                <select id="filiereSelect" class="form-select">
+                  <option value="" disabled selected data-i18n="option_choose_filiere">Choisir la filière</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Titre section pièces justificatives -->
+            <div class="section-subtitle" data-i18n="section_docs_title">Pièces justificatives requises</div>
+
+            <!-- Grille compacte des 4 Pièces Justificatives -->
+            <div class="upload-grid-compact">
+              
+              <!-- Pièce 1 : Acte de naissance / ID -->
+              <div class="upload-card-compact">
+                <span class="doc-label" data-i18n="doc_id_label">Acte / ID *</span>
+                <div class="drop-zone-mini">
+                  <i class="fa-solid fa-address-card doc-icon" aria-hidden="true"></i>
+                  <span class="drop-text" id="text-file-id" data-i18n="doc_action_add">Ajouter</span>
+                  <input type="file" id="file-id" class="file-input" accept=".pdf,.jpeg,.jpg,.png" required>
+                </div>
+                <div class="file-info-mini" id="info-file-id" style="display:none;">
+                  <span class="file-name">...</span>
+                  <i class="fa-solid fa-eye view-btn" onclick="visualiser('file-id')" title="Prévisualiser" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <!-- Pièce 2 : Dernier Bulletin -->
+              <div class="upload-card-compact">
+                <span class="doc-label" data-i18n="doc_bulletin_label">Bulletin *</span>
+                <div class="drop-zone-mini">
+                  <i class="fa-solid fa-file-invoice doc-icon" aria-hidden="true"></i>
+                  <span class="drop-text" id="text-file-bulletin" data-i18n="doc_action_add">Ajouter</span>
+                  <input type="file" id="file-bulletin" class="file-input" accept=".pdf,.jpeg,.jpg,.png" required>
+                </div>
+                <div class="file-info-mini" id="info-file-bulletin" style="display:none;">
+                  <span class="file-name">...</span>
+                  <i class="fa-solid fa-eye view-btn" onclick="visualiser('file-bulletin')" title="Prévisualiser" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <!-- Pièce 3 : Certificat Médical -->
+              <div class="upload-card-compact">
+                <span class="doc-label" data-i18n="doc_medical_label">Certificat *</span>
+                <div class="drop-zone-mini">
+                  <i class="fa-solid fa-file-medical doc-icon" aria-hidden="true"></i>
+                  <span class="drop-text" id="text-file-medical" data-i18n="doc_action_add">Ajouter</span>
+                  <input type="file" id="file-medical" class="file-input" accept=".pdf,.jpeg,.jpg,.png" required>
+                </div>
+                <div class="file-info-mini" id="info-file-medical" style="display:none;">
+                  <span class="file-name">...</span>
+                  <i class="fa-solid fa-eye view-btn" onclick="visualiser('file-medical')" title="Prévisualiser" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <!-- Pièce 4 : Photo d'identité -->
+              <div class="upload-card-compact">
+                <span class="doc-label" data-i18n="doc_photo_label">Photo *</span>
+                <div class="drop-zone-mini">
+                  <i class="fa-solid fa-camera doc-icon" aria-hidden="true"></i>
+                  <span class="drop-text" id="text-file-photo" data-i18n="doc_action_take">Prendre</span>
+                  <input type="file" id="file-photo" class="file-input" accept=".jpeg,.jpg,.png" required>
+                </div>
+                <div class="file-info-mini" id="info-file-photo" style="display:none;">
+                  <span class="file-name">...</span>
+                  <i class="fa-solid fa-eye view-btn" onclick="visualiser('file-photo')" title="Prévisualiser" aria-hidden="true"></i>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Actions de validation -->
+            <button type="submit" class="btn-primary-action orientation-submit-btn" id="submitOrientationBtn" data-i18n="btn_validate_folder">Valider mon dossier</button>
+            
+            <div class="auth-redirect">
+              <a href="index.html" class="auth-redirect-link" data-i18n="link_dashboard_later">Plus tard, retourner au tableau de bord</a>
+            </div>
+
+          </form>
+
+        </article>
+      </div>
+    </main>
+
+    <!-- 4. FOOTER GLOBAL -->
+    <footer class="page-footer">
+      <p>© 2026 LinkEdu — <span data-i18n="footer_credits">Développé par Jean Junior DIRAMBA MAMBOUNDOU | Apprenti dev à l'École 241 (Bikélé, Gabon)</span></p>
+    </footer>
+
+  </div>
+
+  <!-- Modale de visualisation des fichiers -->
+  <div id="modal-visualisation" class="modal-hidden">
+    <div class="modal-backdrop" onclick="fermerVisualisation()"></div>
+    <span class="close-modal" onclick="fermerVisualisation()">&times;</span>
+    <div id="modal-content" class="modal-content"></div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="orientation.js"></script>
+</body>
+</html>

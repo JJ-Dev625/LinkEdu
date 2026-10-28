@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LinkEdu — Inscription et création de compte.">
+  <title>LinkEdu — Inscription</title>
+  
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Feuilles de style -->
+  <link rel="stylesheet" href="accueil3.css">
+  <link rel="stylesheet" href="inscription.css">
+</head>
+<body class="signup-page">
+
+  <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+  <div class="app-viewport-wrapper">
+
+    <!-- 1. BANDEAU D'ANNONCES DYNAMIQUE -->
+    <aside class="announcements-ticker-container" aria-label="Annonces de la plateforme">
+      <div class="announcements-ticker-track" id="homeAnnouncementsTicker" role="region" aria-live="polite">
+        <span data-i18n="announcements_loading">Chargement des annonces...</span>
+      </div>
+    </aside>
+
+    <!-- 2. BARRE DE NAVIGATION SUPÉRIEURE (UNIFIÉE) -->
+    <header class="top-navbar" role="banner">
+      <div class="nav-left">
+        <a href="index.html" class="nav-back-btn" aria-label="Retour à l'accueil">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+        </a>
+
+        <div class="logo-container">
+          <img src="./images/log1.png" alt="LinkEdu - Logo Mode Clair" class="auth-logo logo-light">
+          <img src="./images/log2.png" alt="LinkEdu - Logo Mode Sombre" class="auth-logo logo-dark">
+        </div>
+      </div>
+
+      <nav class="desktop-navbar" aria-label="Navigation secondaire">
+        <a href="apropos.html" class="nav-link"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> <span data-i18n="nav_about">À propos</span></a>
+        <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> <span data-i18n="nav_faq">FAQ</span></a>
+        <button type="button" class="nav-action-btn" id="langToggleDesktop" aria-label="Changer de langue">
+          <i class="fa-solid fa-globe" aria-hidden="true"></i> <span id="langTextDesktop">English</span>
+        </button>
+        <button type="button" class="nav-action-btn" id="darkModeToggleDesktop" aria-label="Basculer le thème clair ou sombre">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i> <span data-i18n="nav_theme">Thème</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- 3. CONTENU PRINCIPAL DE L'INSCRIPTION -->
+    <main class="main-signup-section" id="main-content" role="main">
+      <div class="signup-container">
+        
+        <!-- Carte unique avec en-tête dynamique géré en JS -->
+        <article class="signup-main-card">
+          
+          <!-- Zone Héro supérieure (l'image d'arrière-plan change selon le rôle via JS) -->
+          <div class="signup-hero-header" id="signupHeroHeader">
+            <div class="role-icon-badge">
+              <i id="signupIcon" class="fa-solid fa-user-plus" aria-hidden="true"></i>
+            </div>
+            <h1 id="signupTitle" data-i18n="signup_title_eleve">Créer un compte</h1>
+            <p id="signupSubtitle" class="hero-desc" data-i18n="signup_sub_eleve">Rejoins la plateforme LinkEdu.</p>
+          </div>
+
+          <!-- Barre de progression visuelle (Étape 1/3) -->
+          <div class="signup-progress-bar" aria-label="Étape 1 sur 3">
+            <div class="progress-step active" id="stepIndicator1"></div>
+            <div class="progress-step" id="stepIndicator2"></div>
+            <div class="progress-step" id="stepIndicator3"></div>
+          </div>
+
+          <!-- Formulaire d'inscription -->
+          <form class="signup-form-body" id="signupForm">
+            
+            <!-- CHAMPS DÉDIÉS : ÉLÈVE -->
+            <div id="eleveFieldsContainer">
+              <div class="input-group">
+                <label for="fullNameInput" class="input-label" data-i18n="label_fullname_eleve">Nom et Prénom</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-user input-icon" aria-hidden="true"></i>
+                  <input type="text" id="fullNameInput" placeholder="ex: Jean Mamboundou" class="form-input" data-i18n-placeholder="placeholder_fullname_eleve">
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="emailInput" class="input-label" data-i18n="label_email_eleve">Adresse Email</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-envelope input-icon" aria-hidden="true"></i>
+                  <input type="email" id="emailInput" placeholder="ex: nom@email.com" class="form-input" data-i18n-placeholder="placeholder_email">
+                </div>
+              </div>
+
+              <div class="input-group" id="parentEmailContainer">
+                <label for="parentEmailInput" class="input-label" data-i18n="label_parent_email">Email du Parent / Tuteur Référent</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-user-shield input-icon" aria-hidden="true"></i>
+                  <input type="email" id="parentEmailInput" placeholder="ex: parent@email.com" class="form-input" data-i18n-placeholder="placeholder_parent_email">
+                </div>
+              </div>
+            </div>
+
+            <!-- CHAMPS DÉDIÉS : PARENT / TUTEUR -->
+            <div id="parentFieldsContainer" style="display: none;">
+              <div class="input-group">
+                <label for="parentNameInput" class="input-label" data-i18n="label_parent_name">Nom et Prénom du Parent / Tuteur</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-user-shield input-icon" aria-hidden="true"></i>
+                  <input type="text" id="parentNameInput" placeholder="ex: M. Mamboundou" class="form-input" data-i18n-placeholder="placeholder_parent_name">
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="studentNameInput" class="input-label" data-i18n="label_student_name">Nom et Prénom de l'enfant (Élève)</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-user-graduate input-icon" aria-hidden="true"></i>
+                  <input type="text" id="studentNameInput" placeholder="ex: Junior Mamboundou" class="form-input" data-i18n-placeholder="placeholder_student_name">
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="parentEmailPivotInput" class="input-label" data-i18n="label_parent_pivot_email">Adresse Email du Parent (Compte Pivot)</label>
+                <div class="input-field-wrapper">
+                  <i class="fa-solid fa-envelope input-icon" aria-hidden="true"></i>
+                  <input type="email" id="parentEmailPivotInput" placeholder="ex: parent@email.com" class="form-input" data-i18n-placeholder="placeholder_email">
+                </div>
+                <small class="input-hint" data-i18n="hint_parent_pivot">
+                  Cet email servira de compte pivot pour lier les comptes de vos enfants.
+                </small>
+              </div>
+            </div>
+
+            <!-- CHAMPS SÉCURITÉ -->
+            <div class="input-group">
+              <label for="signupPasswordInput" class="input-label" data-i18n="label_password">Mot de passe</label>
+              <div class="input-field-wrapper">
+                <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+                <input type="password" id="signupPasswordInput" placeholder="••••••••" required class="form-input password-input">
+                <button type="button" id="toggleSignupPasswordBtn" class="toggle-password-btn" aria-label="Afficher le mot de passe">
+                  <i class="fa-solid fa-eye" id="signupEyeIcon" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="confirmPasswordInput" class="input-label" data-i18n="label_confirm_password">Confirmer le mot de passe</label>
+              <div class="input-field-wrapper">
+                <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+                <input type="password" id="confirmPasswordInput" placeholder="••••••••" required class="form-input password-input">
+                <button type="button" id="toggleConfirmPasswordBtn" class="toggle-password-btn" aria-label="Afficher la confirmation du mot de passe">
+                  <i class="fa-solid fa-eye" id="confirmEyeIcon" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- OPTIONS -->
+            <div class="form-options">
+              <label class="remember-me">
+                <input type="checkbox" required> <span data-i18n="terms_accept">J'accepte les conditions d'utilisation</span>
+              </label>
+            </div>
+
+            <!-- ACTION -->
+            <button type="submit" class="btn-primary-action signup-submit-btn" id="submitSignupBtn" data-i18n="btn_next_step">Suivant (Orientation)</button>
+            
+            <div class="auth-redirect">
+              <span class="auth-redirect-text" data-i18n="already_account">Déjà un compte ? </span>
+              <a href="connexion.html" class="auth-redirect-link" data-i18n="link_login">Se connecter</a>
+            </div>
+
+          </form>
+
+        </article>
+      </div>
+    </main>
+
+    <!-- 4. FOOTER GLOBAL -->
+    <footer class="page-footer">
+      <p>© 2026 LinkEdu — <span data-i18n="footer_credits">Développé par Jean Junior DIRAMBA MAMBOUNDOU | Apprenti dev à l'École 241 (Bikélé, Gabon)</span></p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+  <script src="inscription.js"></script>
+</body>
+</html>

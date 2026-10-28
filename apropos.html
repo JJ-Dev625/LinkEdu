@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LinkEdu — À propos de notre plateforme éducative et de notre mission.">
+  <title>LinkEdu — À propos de nous</title>
+  
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Feuilles de style -->
+  <link rel="stylesheet" href="accueil3.css">
+  <link rel="stylesheet" href="about.css">
+</head>
+<body class="about-page">
+
+  <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+  <div class="app-viewport-wrapper">
+
+    <!-- 1. BANDEAU D'ANNONCES DYNAMIQUE -->
+    <aside class="announcements-ticker-container" aria-label="Annonces de la plateforme">
+      <div class="announcements-ticker-track" id="homeAnnouncementsTicker" role="region" aria-live="polite">
+        <span data-i18n="announcements_loading">Chargement des annonces...</span>
+      </div>
+    </aside>
+
+    <!-- 2. BARRE DE NAVIGATION SUPÉRIEURE (UNIFIÉE) -->
+    <header class="top-navbar" role="banner">
+      <div class="nav-left">
+        <a href="index.html" class="nav-back-btn" aria-label="Retour à l'accueil">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+        </a>
+
+        <div class="logo-container">
+          <img src="./images/log1.png" alt="LinkEdu - Logo Mode Clair" class="auth-logo logo-light">
+          <img src="./images/log2.png" alt="LinkEdu - Logo Mode Sombre" class="auth-logo logo-dark">
+        </div>
+      </div>
+
+      <nav class="desktop-navbar" aria-label="Navigation secondaire">
+        <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> <span data-i18n="nav_faq">FAQ</span></a>
+        <button type="button" class="nav-action-btn" id="langToggleDesktop" aria-label="Changer de langue">
+          <i class="fa-solid fa-globe" aria-hidden="true"></i> <span id="langTextDesktop">English</span>
+        </button>
+        <button type="button" class="nav-action-btn" id="darkModeToggleDesktop" aria-label="Basculer le thème clair ou sombre">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i> <span data-i18n="nav_theme">Thème</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- 3. CONTENU PRINCIPAL À PROPOS -->
+    <main class="main-about-section" id="main-content" role="main">
+      <div class="about-container">
+        
+        <!-- En-tête héroique court -->
+        <div class="about-hero-header">
+          <div class="about-badge-dual">
+            <i class="fa-solid fa-graduation-cap icon-blue" aria-hidden="true"></i>
+            <i class="fa-solid fa-chalkboard-user icon-green" aria-hidden="true"></i>
+          </div>
+          <h1 data-i18n="about_main_title">À propos de LinkEdu</h1>
+          <p class="about-hero-tagline" data-i18n="about_hero_tagline">Propulsés pour l’Excellence Numérique.</p>
+        </div>
+
+        <!-- Feuille d'information unifiée -->
+        <article class="about-main-sheet">
+          
+          <!-- Mission & Vision -->
+          <section class="about-block">
+            <h2><i class="fa-solid fa-bullseye icon-blue-title" aria-hidden="true"></i> <span data-i18n="about_mission_title">Notre Mission & Vision</span></h2>
+            <p data-i18n="about_mission_desc">
+              LinkEdu est né d'une vision claire : réinventer le lien éducatif en simplifiant les processus administratifs, en centralisant le suivi scolaire et en rapprochant durablement l’école, l’élève et les parents.
+            </p>
+          </section>
+
+          <!-- Les 4 Piliers -->
+          <section class="about-block">
+            <h2><i class="fa-solid fa-layer-group icon-green-title" aria-hidden="true"></i> <span data-i18n="about_why_title">Pourquoi avons-nous créé LinkEdu ?</span></h2>
+            <p class="section-text" data-i18n="about_why_desc">
+              Trop d’établissements fonctionnent encore avec des processus lents. Notre ambition est de transformer chaque communauté en un espace connecté et transparent.
+            </p>
+
+            <div class="about-grid-balanced">
+              <article class="about-mini-card border-blue">
+                <h3><i class="fa-solid fa-building-columns icon-blue" aria-hidden="true"></i> <span data-i18n="about_admin_title">Administration</span></h3>
+                <p data-i18n="about_admin_desc">Source unique de vérité pour éliminer les erreurs et la perte de temps.</p>
+              </article>
+
+              <article class="about-mini-card border-green">
+                <h3><i class="fa-solid fa-chalkboard-user icon-green" aria-hidden="true"></i> <span data-i18n="about_teacher_title">Enseignant</span></h3>
+                <p data-i18n="about_teacher_desc">Alléger la charge administrative pour se recentrer sur la pédagogie.</p>
+              </article>
+
+              <article class="about-mini-card border-green">
+                <h3><i class="fa-solid fa-user-graduate icon-green" aria-hidden="true"></i> <span data-i18n="about_student_title">Élève</span></h3>
+                <p data-i18n="about_student_desc">Visibilité claire sur la progression, les devoirs et les résultats.</p>
+              </article>
+
+              <article class="about-mini-card border-blue">
+                <h3><i class="fa-solid fa-user-group icon-blue" aria-hidden="true"></i> <span data-i18n="about_parent_title">Parent</span></h3>
+                <p data-i18n="about_parent_desc">Faciliter le suivi quotidien grâce à des alertes et informations en temps réel.</p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Appel à l'action (CTA) -->
+          <section class="about-cta-box">
+            <h3 data-i18n="about_cta_title">Prêt à transformer votre établissement ?</h3>
+            <p data-i18n="about_cta_desc">Découvrez comment LinkEdu peut dynamiser la gestion de votre école.</p>
+            <a href="mailto:contact@linkedu.com" class="btn-primary-action about-btn-custom" data-i18n="about_cta_btn">Demander une démo</a>
+          </section>
+
+        </article>
+      </div>
+    </main>
+
+    <!-- 4. FOOTER GLOBAL CONFORME -->
+    <footer class="page-footer">
+      <p>© 2026 LinkEdu — <span data-i18n="footer_credits">Développé par Jean Junior DIRAMBA MAMBOUNDOU | Apprenti dev à l'École 241 (Bikélé, Gabon)</span></p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

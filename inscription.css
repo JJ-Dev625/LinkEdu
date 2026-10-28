@@ -1,0 +1,292 @@
+/* =================================================================
+   INSCRIPTION.CSS — STYLE IMMERSIF HARMONISÉ
+   =================================================================== */
+
+body.signup-page {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+.nav-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--dropdown-hover);
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.nav-back-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+/* Layout principal */
+.main-signup-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 36px;
+  overflow-y: auto;
+}
+
+.signup-container {
+  max-width: 580px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.signup-main-card {
+  background: var(--bg-wrapper);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+/* En-tête avec image dynamique gérée via JS (classes .role-eleve-bg ou .role-parent-bg) */
+.signup-hero-header {
+  position: relative;
+  padding: 32px 24px;
+  text-align: center;
+  color: #ffffff;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.4s ease;
+}
+
+/* Filtre assombrissant élégant par-dessus l'image pour garantir la lisibilité du texte */
+.signup-hero-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.85), rgba(5, 150, 105, 0.85));
+  z-index: 1;
+}
+
+.signup-hero-header > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Images d'arrière-plan par défaut (à adapter selon tes fichiers dans ./images/) */
+.signup-hero-header.role-eleve-bg {
+  background-image: url('./images/ef.jpg');
+}
+
+.signup-hero-header.role-parent-bg {
+  background-image: url('./images/pa.jpg');
+}
+
+.role-icon-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px auto;
+  font-size: 1.3rem;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.signup-hero-header h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.signup-hero-header .hero-desc {
+  font-size: 0.85rem;
+  opacity: 0.92;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Barre de progression */
+.signup-progress-bar {
+  display: flex;
+  gap: 8px;
+  padding: 16px 28px 0 28px;
+}
+
+.progress-step {
+  flex: 1;
+  height: 5px;
+  border-radius: 4px;
+  background: var(--border-color);
+  transition: background 0.3s ease;
+}
+
+.progress-step.active {
+  background: var(--primary);
+}
+
+/* Formulaire */
+.signup-form-body {
+  padding: 20px 28px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.input-field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 11px 14px 11px 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--dropdown-hover);
+  color: var(--text-main);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.12);
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 4px;
+}
+
+.input-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.form-options {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 15px;
+  height: 15px;
+}
+
+.signup-submit-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  margin-top: 6px;
+}
+
+.signup-submit-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.auth-redirect {
+  text-align: center;
+  font-size: 0.82rem;
+  margin-top: 8px;
+}
+
+.auth-redirect-text {
+  color: var(--text-muted);
+}
+
+.auth-redirect-link {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-redirect-link:hover {
+  text-decoration: underline;
+}
+
+/* =================================================================
+   RESPONSIVE MOBILE
+   =================================================================== */
+@media screen and (max-width: 768px) {
+  .main-signup-section {
+    padding: 0;
+  }
+
+  .signup-container {
+    max-width: 100%;
+  }
+
+  .signup-main-card {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .signup-form-body {
+    flex: 1;
+    padding: 20px 20px 30px 20px;
+  }
+
+  .signup-progress-bar {
+    padding: 16px 20px 0 20px;
+  }
+}

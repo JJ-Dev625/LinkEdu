@@ -1,0 +1,536 @@
+/* =================================================================
+   1. VARIABLES & RESET (ZÉRO SCROLL ABSOLU SUR PC)
+   =================================================================== */
+:root {
+  --primary: #1e3a8a;
+  --primary-hover: #1d4ed8;
+  --success: #059669;
+  --success-hover: #10b981;
+  --bg-body: #f1f5f9;
+  --bg-wrapper: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --dropdown-bg: #ffffff;
+  --dropdown-hover: #f8fafc;
+  --burger-bg: #ffffff;
+  --card-radius: 20px;
+}
+
+body.dark-mode {
+  --bg-body: #0f172a;
+  --bg-wrapper: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --dropdown-bg: #1e293b;
+  --dropdown-hover: #334155;
+  --burger-bg: #1e293b;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--bg-body);
+  color: var(--text-main);
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 10px;
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 9999;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.skip-link:focus { top: 10px; }
+
+.app-viewport-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* =================================================================
+   2. BANDEAU DE DÉFILEMENT & NAVBAR SUPÉRIEURE
+   =================================================================== */
+.announcements-ticker-container {
+  background: var(--primary);
+  color: #ffffff;
+  padding: 6px 16px;
+  overflow: hidden;
+  font-size: 0.8rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.announcements-ticker-track {
+  display: flex;
+  white-space: nowrap;
+  gap: 60px;
+  animation: tickerScroll 25s linear infinite;
+}
+
+.announcements-ticker-container:hover .announcements-ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes tickerScroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.top-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 36px;
+  background: var(--bg-wrapper);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.auth-logo {
+  height: 32px;
+  width: auto;
+}
+
+.logo-dark { display: none; }
+body.dark-mode .logo-light { display: none; }
+body.dark-mode .logo-dark { display: block; }
+
+.desktop-navbar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-link, .nav-action-btn {
+  color: var(--text-main);
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.nav-link:hover, .nav-action-btn:hover {
+  color: var(--primary);
+  background: var(--dropdown-hover);
+}
+
+.burger-btn {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.burger-line {
+  width: 22px;
+  height: 2px;
+  background: var(--text-main);
+  border-radius: 2px;
+}
+
+/* =================================================================
+   3. SECTION HERO (FORMAT IMMERSIF PLEINE IMAGE)
+   =================================================================== */
+.main-hero-section {
+  flex: 1;
+  display: flex;
+  padding: 16px 36px;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 28px;
+  max-width: 1250px;
+  width: 100%;
+  height: 100%;
+  max-height: 520px;
+}
+
+/* Carte Gauche : Fond image net sans masque sombre */
+.hero-left-card {
+  position: relative;
+  border-radius: var(--card-radius);
+  padding: 32px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-brand-top, .hero-brand-content, .hero-transparent-props {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(5, 150, 105, 0.9);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.hero-brand-content h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+.hero-desc {
+  font-size: 0.9rem;
+  opacity: 0.95;
+  max-width: 480px;
+  line-height: 1.35;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* 4 Éléments en 100% TRANSPARENT */
+.hero-transparent-props {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.transparent-prop-item {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.transparent-prop-item i {
+  font-size: 1rem;
+  color: #ffffff;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.8));
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.transparent-prop-item h4 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.transparent-prop-item p {
+  font-size: 0.62rem;
+  color: #f1f5f9;
+  line-height: 1.1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Carte Droite : Panneau d'actions */
+.hero-right-card {
+  background: var(--bg-wrapper);
+  border-radius: var(--card-radius);
+  padding: 32px 28px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.action-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.btn-action-uniform {
+  width: 100%;
+  padding: 15px 18px;
+  border-radius: 14px;
+  border: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  transition: transform 0.15s ease;
+}
+
+.btn-text-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-action-uniform:hover {
+  transform: translateY(-1px);
+}
+
+.btn-connexion-style { background: var(--primary); }
+.btn-inscription-style { background: var(--success); }
+
+.role-dropdown-menu {
+  display: none;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-top: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.role-dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.86rem;
+}
+
+.role-dropdown-menu a:hover {
+  background: var(--dropdown-hover);
+  color: var(--primary);
+}
+
+/* =================================================================
+   4. FOOTER GLOBAL
+   =================================================================== */
+.page-footer {
+  padding: 12px 36px;
+  background: var(--bg-wrapper);
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* =================================================================
+   5. MENU BURGER MOBILE (CARTES ÉLÉGANTES)
+   =================================================================== */
+.burger-menu {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100%;
+  background: var(--bg-wrapper);
+  z-index: 1000;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s ease-in-out;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.burger-menu.active { left: 0; }
+
+.burger-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.burger-header h3 {
+  font-size: 1.1rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.close-burger {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.burger-links-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.burger-section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-top: 12px;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.burger-card-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: var(--dropdown-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.burger-card-item:hover {
+  background: var(--bg-wrapper);
+  border-color: var(--primary);
+}
+
+.burger-icon-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #ffffff;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.burger-icon-wrap.icon-green { background: var(--success); }
+.burger-icon-wrap.icon-blue { background: var(--primary); }
+.burger-icon-wrap.icon-dark { background: #334155; }
+.burger-icon-wrap.icon-globe { background: #2563eb; }
+
+.burger-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+.burger-overlay.active { opacity: 1; visibility: visible; }
+
+/* =================================================================
+   6. RESPONSIVE MOBILE & TABLETTE (DESIGN PLEIN BORD DANS LE CONTENEUR)
+   =================================================================== */
+@media screen and (max-width: 1024px) {
+  html, body {
+    overflow-y: auto;
+    height: auto;
+  }
+
+  .app-viewport-wrapper {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .desktop-navbar { display: none; }
+  .burger-btn { display: flex; }
+
+  .main-hero-section {
+    padding: 0; /* Suppression des marges pour coller aux bords de l'écran */
+  }
+
+  .hero-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-height: none;
+    width: 100%;
+  }
+
+  /* Rendu d'image pleine largeur sans effet de cadre encadré */
+  .hero-left-card {
+    border-radius: 0;
+    margin: 0;
+    width: 100%;
+    min-height: 380px;
+    padding: 24px 20px;
+    box-shadow: none;
+  }
+
+  /* Panneau d'action raccordé directement au bas de l'image */
+  .hero-right-card {
+    border-radius: 20px 20px 0 0;
+    margin-top: -16px;
+    z-index: 5;
+    padding: 24px 20px;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .hero-transparent-props {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero-transparent-props {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .transparent-prop-item i {
+    font-size: 0.9rem;
+  }
+
+  .transparent-prop-item h4 {
+    font-size: 0.72rem;
+  }
+
+  .transparent-prop-item p {
+    font-size: 0.6rem;
+  }
+}
