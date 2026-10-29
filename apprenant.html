@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LinkEdu — Espace Apprenant & Étudiant</title>
+  <link rel="stylesheet" href="apprenant.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="apprenant-body">
+
+  <div class="app-viewport-wrapper">
+
+    <!-- Top Bar -->
+    <header class="app-top-bar" role="banner">
+      <div class="app-brand">
+        <img src="./images/log1.png" alt="LinkEdu - Clair" class="auth-logo logo-light">
+        <img src="./images/log2.png" alt="LinkEdu - Sombre" class="auth-logo logo-dark">
+        <span class="role-badge" data-i18n="apprenant_space_badge">Espace Apprenant</span>
+      </div>
+
+      <div class="app-top-actions">
+        <div class="notification-bell-wrapper" onclick="ouvrirModalNotifications()" title="Notifications & Messages">
+          <i class="fa-solid fa-bell"></i>
+          <span class="nav-badge" id="top-bell-badge" style="display:none;">0</span>
+        </div>
+
+        <button type="button" class="nav-action-btn" id="langToggleDesktop" aria-label="Changer de langue">
+          <i class="fa-solid fa-globe"></i> <span id="langTextDesktop">English</span>
+        </button>
+
+        <button type="button" id="themeToggleBtn" class="nav-action-btn" aria-label="Changer de thème">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Desktop -->
+    <nav class="desktop-nav" aria-label="Navigation principale apprenant">
+      <a href="#" class="desktop-nav-item active" onclick="switchApprenantTab('accueil', this)">
+        <i class="fa-solid fa-house-chimney"></i> <span data-i18n="nav_overview">Accueil</span>
+      </a>
+      <a href="#" class="desktop-nav-item" onclick="switchApprenantTab('cours', this)">
+        <i class="fa-solid fa-book-open"></i> <span data-i18n="nav_courses">Cours & Supports</span>
+      </a>
+      <a href="#" class="desktop-nav-item" onclick="switchApprenantTab('notes', this)">
+        <i class="fa-solid fa-chart-pie"></i> <span data-i18n="nav_grades">Notes & Bulletins</span>
+      </a>
+      <a href="#" class="desktop-nav-item" onclick="switchApprenantTab('vie-scolaire', this)">
+        <i class="fa-solid fa-clipboard-user"></i> <span data-i18n="nav_life">Vie Scolaire</span>
+      </a>
+      <a href="#" class="desktop-nav-item" onclick="switchApprenantTab('documents', this)">
+        <i class="fa-solid fa-folder-open"></i> <span data-i18n="nav_docs">Documents</span>
+      </a>
+    </nav>
+
+    <!-- Contenu Principal -->
+    <main class="main-content" role="main">
+      
+      <!-- RUBAN D'ANNONCES DÉFILANT (Avec marge de séparation corrigée) -->
+      <div class="announcement-ticker-container">
+        <div class="ticker-label"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="ticker_title">Flash Info :</span></div>
+        <div class="ticker-wrapper">
+          <div class="ticker-text" id="marquee-annonces">
+            Bienvenue sur la plateforme LinkEdu. Pensez à vérifier vos emplois du temps et à soumettre vos justificatifs d'absence dans les délais.
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 1 : ACCUEIL / VUE D'ENSEMBLE -->
+      <section id="accueil" class="app-section">
+        
+        <!-- Carte de Bienvenue & Profil Apprenant -->
+        <div class="welcome-banner-card">
+          <div class="welcome-main-flex">
+            <div id="apprenant-avatar" class="hero-avatar-box"></div>
+            <div class="welcome-info">
+              <span class="welcome-subtitle"><span data-i18n="welcome_sub">Heureux de vous revoir</span>,</span>
+              <h1 id="apprenant-nom" class="welcome-title">Jean Junior</h1>
+              <div class="school-tag-badge">
+                <i class="fa-solid fa-school"></i>
+                <span id="apprenant-ecole">École 241</span> — <span id="apprenant-classe">Terminale Web & Mobile</span>
+              </div>
+            </div>
+          </div>
+          <div class="quick-status-pill">
+            <span class="status-dot"></span>
+            <span id="apprenant-matricule">LE-2026-0941</span>
+          </div>
+        </div>
+
+        <!-- KPIs Académiques -->
+        <div class="dashboard-grid">
+          <article class="card stat-card accent-blue">
+            <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="stat-info">
+              <h3 data-i18n="stat_avg">Moyenne Générale</h3>
+              <p id="stat-moyenne" class="stat-value">-- / 20</p>
+            </div>
+          </article>
+
+          <article class="card stat-card accent-green">
+            <div class="stat-icon"><i class="fa-solid fa-wallet"></i></div>
+            <div class="stat-info">
+              <h3 data-i18n="stat_tuition">Statut Scolarité</h3>
+              <p id="stat-scolarite" class="stat-value" style="font-size: 1rem;">Chargement...</p>
+            </div>
+          </article>
+        </div>
+
+        <!-- Widget Emploi du Temps du jour -->
+        <div class="card layout-card">
+          <h3 class="card-subtitle"><i class="fa-solid fa-calendar-days text-primary"></i> <span data-i18n="schedule_title">Emploi du temps du jour</span></h3>
+          <div id="apprenant-planning-du-jour">
+            <p class="empty-text" data-i18n="empty_schedule">Aucun cours planifié pour aujourd'hui.</p>
+          </div>
+        </div>
+
+        <!-- WIDGET EXAMENS NATIONAUX (Style Parent - Déroulable au clic) -->
+        <div class="card layout-card" style="background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(5, 150, 105, 0.05)); border: 1px solid var(--primary);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <div>
+              <h3 class="card-subtitle" style="margin-bottom: 4px;"><i class="fa-solid fa-award text-primary"></i> <span data-i18n="widget_exam_title">Portail des Examens Nationaux (CEP, BEPC, BAC)</span></h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="widget_exam_desc">Consultez les résultats officiels de fin d'année à l'aide de votre numéro de composition.</p>
+            </div>
+            <button type="button" class="btn-action-primary" onclick="basculerVoletExamens()" style="padding: 10px 16px; border-radius: 8px; background: var(--primary); color: #fff; border: none; cursor: pointer; font-weight: 600; white-space: nowrap;">
+              <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="widget_exam_btn">Vérifier un résultat</span>
+            </button>
+          </div>
+
+          <!-- Volet déroulant des examens (Caché par défaut) -->
+          <div id="volet-examens-deroulant" style="display: none; margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; gap: 10px; width: 100%; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 140px;">
+                  <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Examen</label>
+                  <select id="exam-type-select" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-wrapper); color: var(--text-main);">
+                    <option value="BAC">Baccalauréat (BAC)</option>
+                    <option value="BEPC">BEPC</option>
+                    <option value="CEP">CEP</option>
+                  </select>
+                </div>
+                <div style="flex: 2; min-width: 200px;">
+                  <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="exam_label_num">N° de composition</label>
+                  <input type="text" id="exam-table-number" placeholder="Ex: 26-BAC-1048" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-wrapper); color: var(--text-main);">
+                </div>
+              </div>
+              <div style="display: flex; gap: 10px; width: 100%; align-items: flex-end; flex-wrap: wrap;">
+                <div style="flex: 2; min-width: 200px;">
+                  <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="exam_label_dob">Date de naissance</label>
+                  <input type="date" id="exam-dob" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-wrapper); color: var(--text-main);">
+                </div>
+                <button type="button" onclick="rechercherResultatExamen()" style="flex: 1; min-width: 140px; height: 42px; border-radius: 8px; background: var(--primary); color: #fff; border: none; font-weight: 600; cursor: pointer;">
+                  <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="btn_search_exam">Rechercher</span>
+                </button>
+              </div>
+            </div>
+            <div id="exam-result-container" style="margin-top: 16px;"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- SECTION 2 : COURS & SUPPORTS -->
+      <section id="cours" class="app-section" style="display: none;">
+        <h1 class="section-title" data-i18n="nav_courses">Cours & Supports Pédagogiques</h1>
+        <div class="card layout-card">
+          <div id="apprenant-cours-list"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 3 : NOTES -->
+      <section id="notes" class="app-section" style="display: none;">
+        <h1 class="section-title" data-i18n="nav_grades">Suivi des Notes & Calcul Automatique</h1>
+        <div class="card layout-card">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="th_date">Date</th>
+                  <th data-i18n="th_eval">Évaluation</th>
+                  <th data-i18n="th_subject">Matière</th>
+                  <th data-i18n="th_grade">Note</th>
+                  <th data-i18n="th_feedback">Appréciation</th>
+                </tr>
+              </thead>
+              <tbody id="apprenant-notes-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4 : VIE SCOLAIRE -->
+      <section id="vie-scolaire" class="app-section" style="display: none;">
+        <div class="section-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h1 class="section-title" style="margin: 0;" data-i18n="nav_life">Journal de Présence & Absences</h1>
+          <button type="button" class="btn-primary-action" onclick="ouvrirModalJustification()" style="padding: 8px 14px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+            <i class="fa-solid fa-file-signature"></i> <span data-i18n="btn_justify_absence">Justifier une absence</span>
+          </button>
+        </div>
+
+        <div class="card layout-card">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="th_date">Date</th>
+                  <th data-i18n="th_status">Statut</th>
+                  <th data-i18n="th_justif">Motif / Justification</th>
+                </tr>
+              </thead>
+              <tbody id="apprenant-presence-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5 : DOCUMENTS -->
+      <section id="documents" class="app-section" style="display: none;">
+        <h1 class="section-title" data-i18n="nav_docs">Coffre-fort de l'Apprenant</h1>
+        <div class="card layout-card">
+          <div id="apprenant-docs-list"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Mobile -->
+    <nav class="bottom-nav" aria-label="Navigation mobile apprenant">
+      <a href="#" class="bottom-nav-item active" onclick="switchApprenantTab('accueil', this)">
+        <i class="fa-solid fa-house-chimney"></i><span data-i18n="mob_home">Accueil</span>
+      </a>
+      <a href="#" class="bottom-nav-item" onclick="switchApprenantTab('cours', this)">
+        <i class="fa-solid fa-book-open"></i><span data-i18n="mob_courses">Cours</span>
+      </a>
+      <a href="#" class="bottom-nav-item" onclick="switchApprenantTab('notes', this)">
+        <i class="fa-solid fa-chart-pie"></i><span data-i18n="mob_grades">Notes</span>
+      </a>
+      <a href="#" class="bottom-nav-item" onclick="switchApprenantTab('vie-scolaire', this)">
+        <i class="fa-solid fa-clipboard-user"></i><span data-i18n="mob_life">Suivi</span>
+      </a>
+      <a href="#" class="bottom-nav-item" onclick="switchApprenantTab('documents', this)">
+        <i class="fa-solid fa-folder-open"></i><span data-i18n="mob_docs">Docs</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- MODALE JUSTIFICATION D'ABSENCE (Avec l'icône de l'œil parfaitement insérée) -->
+  <div id="modal-justification" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; z-index:2000; justify-content:center; align-items:center;">
+    <div onclick="fermerModalJustification()" style="position:absolute; width:100%; height:100%; background:rgba(0,0,0,0.5);"></div>
+    <div style="position:relative; background:var(--bg-wrapper); padding:24px; border-radius:16px; width:90%; max-width:450px; z-index:2001; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+      <h3 style="margin-bottom: 8px;" data-i18n="modal_justify_title">Soumettre un justificatif d'absence</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;" data-i18n="modal_justify_subtitle">Transmettez le motif et la pièce jointe à l'administration dans les délais.</p>
+      
+      <form id="form-justification" onsubmit="soumettreJustification(event)">
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 0.78rem; font-weight:600; display:block; margin-bottom:4px;" data-i18n="label_absence_date">Date de l'absence *</label>
+          <input type="date" id="justif-date" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 0.78rem; font-weight:600; display:block; margin-bottom:4px;" data-i18n="label_absence_reason">Motif / Explication *</label>
+          <textarea id="justif-motif" rows="3" required placeholder="ex: Certificat médical pour motif de santé..." style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);"></textarea>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 0.78rem; font-weight:600; display:block; margin-bottom:4px;" data-i18n="label_absence_file">Pièce justificative (PDF ou Image) *</label>
+          <!-- Conteneur flex bien délimité pour l'input et l'œil -->
+          <div style="display: flex; gap: 8px; align-items: center; width: 100%;">
+            <input type="file" id="justif-file" accept="image/*, application/pdf" required style="padding: 6px; flex: 1; font-size:0.75rem; min-width: 0;" onchange="previsualiserFichierSelectionne(this)">
+            <button type="button" id="btn-apercu-file" style="display:none; padding: 10px 14px; font-size: 0.8rem; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main); cursor:pointer; flex-shrink: 0;" onclick="ouvrirApercuFichier()"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onclick="fermerModalJustification()" style="padding: 10px 16px; border-radius:8px; border:1px solid var(--border-color); background:transparent; color:var(--text-main); cursor:pointer;" data-i18n="btn_cancel">Annuler</button>
+          <button type="submit" style="padding: 10px 16px; border-radius:8px; background:var(--primary); color:#fff; border:none; font-weight:600; cursor:pointer;" data-i18n="btn_send">Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALE NOTIFICATIONS -->
+  <div id="modal-notifications" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; z-index:2000; justify-content:center; align-items:center;">
+    <div onclick="fermerModalNotifications()" style="position:absolute; width:100%; height:100%; background:rgba(0,0,0,0.5);"></div>
+    <div style="position:relative; background:var(--bg-wrapper); padding:24px; border-radius:16px; width:90%; max-width:500px; z-index:2001; max-height:80vh; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="margin:0;"><i class="fa-solid fa-bell text-primary"></i> <span data-i18n="notif_modal_title">Centre de Notifications</span></h3>
+        <button onclick="fermerModalNotifications()" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-main);"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modal-notifications-list"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="apprenant.js"></script>
+</body>
+</html>

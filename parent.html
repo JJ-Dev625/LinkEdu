@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LinkEdu — Espace Parent & Tuteur</title>
+  <link rel="stylesheet" href="parent.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="parent-body">
+
+  <div class="app-viewport-wrapper">
+
+    <!-- Top Bar -->
+    <header class="parent-top-bar" role="banner">
+      <div class="parent-brand">
+        <img src="./images/log1.png" alt="LinkEdu - Logo Clair" class="auth-logo logo-light">
+        <img src="./images/log2.png" alt="LinkEdu - Logo Sombre" class="auth-logo logo-dark">
+        <span class="role-badge" data-i18n="parent_space_badge">Espace Parent</span>
+      </div>
+
+      <div class="parent-top-actions">
+        <div class="notification-bell-wrapper" onclick="switchParentTab('communication', document.getElementById('tab-msg-desktop'))" title="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="nav-badge" id="top-bell-badge" style="display:none;">0</span>
+        </div>
+
+        <div class="child-switcher-wrapper">
+          <div id="topbar-child-avatar-container" class="topbar-avatar-mini"></div>
+          <div class="switcher-text-group">
+            <label for="select-enfant-actif" class="switcher-label"><i class="fa-solid fa-child-reaching"></i> <span data-i18n="parent_tracking_label">Suivi de :</span></label>
+            <select id="select-enfant-actif" onchange="changerEnfantActif()" class="form-select-switcher"></select>
+          </div>
+        </div>
+
+        <button type="button" class="nav-action-btn" id="langToggleDesktop" aria-label="Changer de langue">
+          <i class="fa-solid fa-globe"></i> <span id="langTextDesktop">English</span>
+        </button>
+
+        <button type="button" id="themeToggleBtn" class="nav-action-btn" aria-label="Changer de thème">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Desktop -->
+    <nav class="desktop-nav" aria-label="Navigation principale parent">
+      <a href="#" class="desktop-nav-item active" onclick="switchParentTab('accueil', this)">
+        <i class="fa-solid fa-house-chimney"></i> <span data-i18n="parent_nav_overview">Vue d'ensemble</span>
+      </a>
+      <a href="#" class="desktop-nav-item" onclick="switchParentTab('notes', this)">
+        <i class="fa-solid fa-chart-pie"></i> <span data-i18n="parent_nav_grades">Bulletins & Notes</span>
+      </a>
+      <a href="#" class="desktop-nav-item" onclick="switchParentTab('vie-scolaire', this)">
+        <i class="fa-solid fa-clipboard-user"></i> <span data-i18n="parent_nav_life">Vie Scolaire</span>
+      </a>
+      <a href="#" class="desktop-nav-item" onclick="switchParentTab('documents', this)">
+        <i class="fa-solid fa-folder-open"></i> <span data-i18n="parent_nav_docs">Coffre-fort Docs</span>
+      </a>
+      <a href="#" class="desktop-nav-item" id="tab-msg-desktop" onclick="switchParentTab('communication', this)">
+        <i class="fa-solid fa-comments"></i> <span data-i18n="parent_nav_messages">Messagerie</span>
+        <span class="nav-badge" id="badge-notif-desktop" style="display:none;">0</span>
+      </a>
+      <a href="#" class="desktop-nav-item" onclick="switchParentTab('finances', this)">
+        <i class="fa-solid fa-wallet"></i> <span data-i18n="parent_nav_finances">Scolarité & Mobile Money</span>
+      </a>
+      <a href="#" class="desktop-nav-item" onclick="switchParentTab('examens', this)">
+        <i class="fa-solid fa-award"></i> <span data-i18n="parent_nav_exams">Examens</span>
+      </a>
+    </nav>
+
+    <!-- Zone principale de contenu -->
+    <main class="main-content" role="main">
+      
+      <!-- SECTION 1 : ACCUEIL (Avec Widget Examens Nationaux intégré) -->
+      <section id="accueil" class="parent-section">
+        <div class="welcome-banner-card">
+          <div class="welcome-main-flex">
+            <div id="hero-child-avatar" class="hero-avatar-box"></div>
+            <div class="welcome-info">
+              <span class="welcome-subtitle"><span data-i18n="parent_welcome_sub">Bienvenue</span>, <strong id="parent-account-name">M. Mamboundou</strong></span>
+              <h1 id="welcome-child-name" class="welcome-title">Marc Mboundou</h1>
+              <div class="school-tag-badge">
+                <i class="fa-solid fa-school"></i>
+                <span id="welcome-school-name">Lycée National Léon Mba</span> — <span id="classe-active-badge">Terminale A1</span>
+              </div>
+            </div>
+          </div>
+          <div class="quick-status-pill">
+            <span class="status-dot"></span>
+            <span data-i18n="parent_school_open">Établissement Ouvert</span>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="card stat-card accent-blue">
+            <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="stat-info">
+              <h3 data-i18n="parent_stat_avg">Moyenne Générale</h3>
+              <p id="stat-moyenne" class="stat-value">-- / 20</p>
+            </div>
+          </article>
+
+          <article class="card stat-card accent-red">
+            <div class="stat-icon"><i class="fa-solid fa-user-xmark"></i></div>
+            <div class="stat-info">
+              <h3 data-i18n="parent_stat_abs">Absences (Mois)</h3>
+              <p id="stat-absences" class="stat-value">0</p>
+            </div>
+          </article>
+
+          <article class="card stat-card accent-amber">
+            <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="stat-info">
+              <h3 data-i18n="parent_stat_late">Retards</h3>
+              <p id="stat-retards" class="stat-value">0</p>
+            </div>
+          </article>
+        </div>
+
+        <!-- WIDGET D'ACCÈS RAPIDE AUX EXAMENS NATIONAUX SUR L'ACCUEIL -->
+        <div class="card layout-card" style="background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(5, 150, 105, 0.05)); border: 1px solid var(--primary);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <div>
+              <h3 class="card-subtitle" style="margin-bottom: 4px;"><i class="fa-solid fa-award text-primary"></i> <span data-i18n="widget_exam_title">Portail des Examens Nationaux (CEP, BEPC, BAC)</span></h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="widget_exam_desc">Consultez les résultats officiels de fin d'année à l'aide de votre numéro de composition.</p>
+            </div>
+            <button type="button" class="btn-action-primary" onclick="switchParentTab('examens', document.querySelector('.desktop-nav-item:last-child'))">
+              <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="widget_exam_btn">Vérifier un résultat</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-two-columns">
+          <div class="card layout-card">
+            <h3 class="card-subtitle"><i class="fa-solid fa-bullhorn text-primary"></i> <span data-i18n="parent_announcements_title">Annonces & Communications</span></h3>
+            <div id="parent-dernieres-alertes">
+              <p class="empty-text" data-i18n="parent_empty_announcements">Aucune annonce récente pour le moment.</p>
+            </div>
+          </div>
+
+          <div class="card layout-card">
+            <h3 class="card-subtitle"><i class="fa-solid fa-timeline text-success"></i> <span data-i18n="parent_timeline_title">Fil d'actualité de l'élève</span></h3>
+            <div class="timeline-container" id="parent-student-timeline"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2 : NOTES -->
+      <section id="notes" class="parent-section" style="display: none;">
+        <h1 class="section-title" data-i18n="parent_nav_grades">Suivi Académique & Notes</h1>
+        <div class="card layout-card">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="th_date">Date</th>
+                  <th data-i18n="th_evaluation">Évaluation</th>
+                  <th data-i18n="th_subject">Matière / Classe</th>
+                  <th data-i18n="th_grade">Note</th>
+                  <th data-i18n="th_appreciation">Appréciation Professeur</th>
+                </tr>
+              </thead>
+              <tbody id="parent-notes-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3 : VIE SCOLAIRE & SUIVI -->
+      <section id="vie-scolaire" class="parent-section" style="display: none;">
+        <div class="section-header-flex">
+          <h1 class="section-title" data-i18n="parent_nav_life">Journal de Présence & Discipline</h1>
+          <button type="button" class="btn-action-primary" onclick="ouvrirModalJustification()">
+            <i class="fa-solid fa-file-signature"></i> <span data-i18n="btn_justify_absence">Justifier une absence</span>
+          </button>
+        </div>
+
+        <div class="card layout-card">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="th_date">Date</th>
+                  <th data-i18n="th_class">Classe</th>
+                  <th data-i18n="th_status">Statut Enregistré</th>
+                  <th data-i18n="th_justification">Justificatif</th>
+                </tr>
+              </thead>
+              <tbody id="parent-presence-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4 : COFFRE-FORT ADMINISTRATIF -->
+      <section id="documents" class="parent-section" style="display: none;">
+        <h1 class="section-title" data-i18n="parent_nav_docs">Coffre-fort & Documents Officiels</h1>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;" data-i18n="doc_vault_desc">Certificats de scolarité, bulletins trimestriels, tableaux d'honneur et carte scolaire émis par l'administration.</p>
+        
+        <div class="card layout-card">
+          <div id="parent-documents-list"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 5 : MESSAGERIE -->
+      <section id="communication" class="parent-section" style="display: none;">
+        <h1 class="section-title" data-i18n="parent_nav_messages">Messagerie & Annonces Enseignants</h1>
+        <div class="card layout-card">
+          <div id="parent-notifications-list"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 6 : FINANCES & MOBILE MONEY -->
+      <section id="finances" class="parent-section" style="display: none;">
+        <h1 class="section-title" data-i18n="parent_nav_finances">Scolarité & Paiements Mobile Money</h1>
+        
+        <div class="card layout-card" style="margin-bottom: 20px;">
+          <div class="finance-status-box" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <div class="finance-info">
+              <h3 data-i18n="finance_box_title">Statut du Dossier & Frais de Scolarité</h3>
+              <p data-i18n="finance_box_desc">État du règlement pour l'année académique en cours.</p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <div class="finance-badge success" id="finance-status-badge">
+                <i class="fa-solid fa-circle-check"></i> Dossier Validé & Payé
+              </div>
+              <button type="button" class="btn-action-primary" onclick="initierPaiementMobileMoney()">
+                <i class="fa-solid fa-mobile-screen-button"></i> Payer par Tranche (Mobile Money)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card layout-card">
+          <h3 class="card-subtitle"><i class="fa-solid fa-receipt text-primary"></i> <span data-i18n="finance_history_title">Historique des Transactions & Reçus Officiels</span></h3>
+          <div class="table-responsive" style="margin-top: 10px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Référence</th>
+                  <th>Opérateur</th>
+                  <th>Montant</th>
+                  <th>Statut</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="parent-transactions-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7 : EXAMENS NATIONAUX (Accessible via Accueil ou Desktop) -->
+      <section id="examens" class="parent-section" style="display: none;">
+        <h1 class="section-title" data-i18n="parent_nav_exams">Résultats aux Examens Nationaux</h1>
+        <div class="card layout-card">
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;" data-i18n="exam_search_desc">Consultez les résultats officiels (CEP, BEPC, BAC) en renseignant votre numéro de composition et votre date de naissance.</p>
+          
+          <div class="exam-search-box" style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; gap: 10px; width: 100%; flex-wrap: wrap;">
+              <div class="input-group" style="flex: 1; min-width: 140px;">
+                <label class="input-label" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Examen</label>
+                <select id="exam-type-select" class="form-input">
+                  <option value="BAC">Baccalauréat (BAC)</option>
+                  <option value="BEPC">BEPC</option>
+                  <option value="CEP">CEP</option>
+                </select>
+              </div>
+              <div class="input-group" style="flex: 2; min-width: 200px;">
+                <label class="input-label" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;" data-i18n="exam_label_num">N° de composition</label>
+                <input type="text" id="exam-table-number" placeholder="Ex: 26-BAC-1048" class="form-input">
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; width: 100%; align-items: flex-end; flex-wrap: wrap;">
+              <div class="input-group" style="flex: 2; min-width: 200px;">
+                <label class="input-label" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;" data-i18n="exam_label_dob">Date de naissance</label>
+                <input type="date" id="exam-dob" class="form-input">
+              </div>
+              <button type="button" class="btn-action-primary" style="flex: 1; min-width: 140px; height: 42px;" onclick="rechercherResultatExamen()">
+                <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="btn_search_exam">Rechercher</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="exam-result-container" style="margin-top: 20px;">
+            <div class="empty-exam-state" data-i18n="exam_empty_state">Entrez vos identifiants pour afficher le relevé officiel.</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Mobile Parfaitement Allégée (5 Onglets Clés) -->
+    <nav class="bottom-nav" aria-label="Navigation mobile parent">
+      <a href="#" class="bottom-nav-item active" onclick="switchParentTab('accueil', this)">
+        <i class="fa-solid fa-house-chimney"></i><span data-i18n="mob_home">Accueil</span>
+      </a>
+      <a href="#" class="bottom-nav-item" onclick="switchParentTab('notes', this)">
+        <i class="fa-solid fa-chart-pie"></i><span data-i18n="mob_grades">Notes</span>
+      </a>
+      <a href="#" class="bottom-nav-item" onclick="switchParentTab('vie-scolaire', this)">
+        <i class="fa-solid fa-clipboard-user"></i><span data-i18n="mob_life">Suivi</span>
+      </a>
+      <a href="#" class="bottom-nav-item" onclick="switchParentTab('documents', this)">
+        <i class="fa-solid fa-folder-open"></i><span data-i18n="mob_docs">Docs</span>
+      </a>
+      <a href="#" class="bottom-nav-item" onclick="switchParentTab('finances', this)">
+        <i class="fa-solid fa-wallet"></i><span data-i18n="mob_finances">Scolarité</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- MODALE JUSTIFICATION D'ABSENCE -->
+  <div id="modal-justification" class="modal-hidden">
+    <div class="modal-backdrop" onclick="fermerModalJustification()"></div>
+    <div class="modal-box">
+      <h3 data-i18n="modal_justify_title">Soumettre un justificatif d'absence</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;" data-i18n="modal_justify_subtitle">Transmettez le motif et la pièce jointe à la Vie Scolaire.</p>
+      
+      <form id="form-justification" onsubmit="soumettreJustification(event)">
+        <div class="input-group">
+          <label class="input-label" data-i18n="label_absence_date">Date de l'absence *</label>
+          <input type="date" id="justif-date" required class="form-input">
+        </div>
+        <div class="input-group" style="margin-top: 10px;">
+          <label class="input-label" data-i18n="label_absence_reason">Motif / Explication *</label>
+          <textarea id="justif-motif" rows="3" required placeholder="ex: Certificat médical pour motif de santé..." class="form-input" style="padding: 10px;"></textarea>
+        </div>
+        <div class="input-group" style="margin-top: 10px;">
+          <label class="input-label" data-i18n="label_absence_file">Pièce justificative (PDF ou Image) *</label>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="file" id="justif-file" accept="image/*, application/pdf" required class="form-input" style="padding: 6px; flex: 1;" onchange="previsualiserFichierSelectionne(this)">
+            <button type="button" id="btn-apercu-file" class="btn-secondary" style="display:none; padding: 10px 14px; font-size: 0.8rem;" onclick="ouvrirApercuFichier()"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="fermerModalJustification()" data-i18n="btn_cancel">Annuler</button>
+          <button type="submit" class="btn-primary-action" data-i18n="btn_send">Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="parent.js"></script>
+</body>
+</html>
