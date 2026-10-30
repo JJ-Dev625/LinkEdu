@@ -61,7 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
             exam_label_dob: "Date de naissance",
             btn_search_exam: "Rechercher",
             exam_empty_state: "Entrez vos identifiants pour afficher le relevé officiel.",
-            doc_vault_desc: "Certificats de scolarité, bulletins trimestriels, tableaux d'honneur et carte scolaire émis par l'administration."
+            doc_vault_desc: "Certificats de scolarité, bulletins trimestriels, tableaux d'honneur et carte scolaire émis par l'administration.",
+            campus_gallery_title: "Établissements & Vie Campus",
+            footer_copyright: "LinkEdu © 2026 — Plateforme Éducative Numérique Unifiée. Tous droits réservés.",
+            footer_legal: "Mentions Légales",
+            footer_support: "Support Technique"
         },
         en: {
             parent_space_badge: "Parent Portal",
@@ -120,10 +124,13 @@ document.addEventListener("DOMContentLoaded", () => {
             exam_label_dob: "Date of Birth",
             btn_search_exam: "Search",
             exam_empty_state: "Enter your credentials to view the official transcript.",
-            doc_vault_desc: "Certificates, report cards, honor rolls, and student ID cards issued by the administration."
+            doc_vault_desc: "Certificates, report cards, honor rolls, and student ID cards issued by the administration.",
+            campus_gallery_title: "Campuses & School Life",
+            footer_copyright: "LinkEdu © 2026 — Unified Digital Educational Platform. All rights reserved.",
+            footer_legal: "Legal Notices",
+            footer_support: "Technical Support"
         }
     };
-
     function applyParentLanguage(lang) {
         localStorage.setItem("linkedu_lang", lang);
         const dict = localParentTranslations[lang] || localParentTranslations.fr;
@@ -200,29 +207,104 @@ function updateThemeIcon(isDark) {
     if (icon) icon.className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
 }
 
-function initialiserSelecteurEnfants() {
-    const selectEnfant = document.getElementById("select-enfant-actif");
-    if (!selectEnfant) return;
+window.deconnecterUtilisateur = function() {
+    if (confirm("Voulez-vous vraiment vous déconnecter de LinkEdu ?")) {
+        localStorage.removeItem("linkedu_user");
+        sessionStorage.removeItem("linkedu_user");
+        window.location.href = "index.html";
+    }
+};
+// =================================================================
+// CARROUSEL D'IMAGES DYNAMIQUE EN FONCTION DE L'ÉTABLISSEMENT DE L'ENFANT
+// =================================================================
+function chargerCarrouselMediaParEcole(nomEcole) {
+    const container = document.getElementById("media-carousel-container");
+    if (!container) return;
 
-    const candidatures = JSON.parse(localStorage.getItem("candidatures")) || [];
-    
-    if (candidatures.length > 0) {
-        selectEnfant.innerHTML = candidatures.map(c => {
-            const nomComplet = `${c.prenom || ''} ${c.nom || 'Élève'}`.trim();
-            const classe = c.classeDemandee || 'Terminale';
-            const ecole = c.etablissement || 'Lycée National Léon Mba';
-            return `<option value="${nomComplet}" data-ecole="${ecole}" data-classe="${classe}">${nomComplet} — ${ecole} (${classe})</option>`;
-        }).join('');
+    let galeriesMediaDB = [];
+
+    // Adapte les images et le contenu en fonction de l'établissement actif de l'enfant
+    if (nomEcole.toLowerCase().includes("bikélé") || nomEcole.toLowerCase().includes("ces")) {
+        galeriesMediaDB = [
+            { titre: "CES de Bikélé", categorie: "Établissement Principal", url: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=500&q=80" },
+            { titre: "Cour Centrale & Salles de classe", categorie: "Infrastructures", url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=500&q=80" },
+            { titre: "Activités Sportives Collège", categorie: "Vie Scolaire", url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=500&q=80" }
+        ];
     } else {
-        selectEnfant.innerHTML = `
-            <option value="Marc Mboundou" data-ecole="Lycée National Léon Mba" data-classe="Terminale A1">Marc Mboundou — Lycée Léon Mba (Terminale A1)</option>
-            <option value="Sarah Mboundou" data-ecole="CES de Bikélé" data-classe="4ème B">Sarah Mboundou — CES de Bikélé (4ème B)</option>
-        `;
+        // Par défaut / Lycée National Léon Mba
+        galeriesMediaDB = [
+            { titre: "Lycée National Léon Mba", categorie: "Établissement", url: "./images/log1.png" },
+            { titre: "Laboratoire Numérique & Informatique", categorie: "Infrastructures", url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80" },
+            { titre: "Amphithéâtre & Conférences", categorie: "Vie Campus", url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=500&q=80" }
+        ];
     }
 
-    const savedEnfant = localStorage.getItem("parentEnfantActif");
-    if (savedEnfant) selectEnfant.value = savedEnfant;
+    container.innerHTML = galeriesMediaDB.map((m) => `
+        <div class="media-item-card" onclick="alert('${m.titre} - ${m.categorie}')">
+            <img src="${m.url}" alt="${m.titre}" onerror="this.src='https://via.placeholder.com/260x130?text=LinkEdu+Campus'">
+            <div class="media-overlay-info">
+                <span>${m.titre}</span>
+                <i class="fa-solid fa-expand" style="font-size: 0.7rem; opacity: 0.8;"></i>
+            </div>
+        </div>
+    `).join('');
 }
+
+function initialiserSelecteurEnfants() {
+    const selectEnfant = document.getElementById("select-enfant-actif");
+    const mobileTabsContainer = document.getElementById("mobile-child-tabs-container");
+    const candidatures = JSON.parse(localStorage.getItem("candidatures")) || [];
+    
+    let enfantsList = [];
+    if (candidatures.length > 0) {
+        enfantsList = candidatures.map(c => ({
+            nomComplet: `${c.prenom || ''} ${c.nom || 'Élève'}`.trim(),
+            classe: c.classeDemandee || 'Terminale',
+            ecole: c.etablissement || 'Lycée National Léon Mba',
+            photo: c.photoEleve || null
+        }));
+    } else {
+        enfantsList = [
+            { nomComplet: "Marc Mboundou", ecole: "Lycée National Léon Mba", classe: "Terminale A1", photo: null },
+            { nomComplet: "Sarah Mboundou", ecole: "CES de Bikélé", classe: "4ème B", photo: null }
+        ];
+    }
+
+    if (selectEnfant) {
+        selectEnfant.innerHTML = enfantsList.map(e => `
+            <option value="${e.nomComplet}" data-ecole="${e.ecole}" data-classe="${e.classe}">${e.nomComplet} — ${e.ecole} (${e.classe})</option>
+        `).join('');
+    }
+
+    const savedEnfant = localStorage.getItem("parentEnfantActif") || enfantsList[0].nomComplet;
+    if (selectEnfant) selectEnfant.value = savedEnfant;
+
+    if (mobileTabsContainer) {
+        mobileTabsContainer.innerHTML = enfantsList.map(e => {
+            const isActive = e.nomComplet === savedEnfant;
+            const initiales = obtenirInitiales(e.nomComplet);
+            const avatarHtml = e.photo ? `<img src="${e.photo}" alt="${e.nomComplet}">` : initiales;
+
+            return `
+                <div class="child-tab-pill ${isActive ? 'active' : ''}" onclick="selectionnerEnfantMobile('${e.nomComplet}')">
+                    <div class="child-tab-avatar">${avatarHtml}</div>
+                    <div class="child-tab-info">
+                        <span class="child-tab-title">${e.nomComplet}</span>
+                        <span class="child-tab-subtitle">${e.classe}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+}
+window.selectionnerEnfantMobile = function(nomComplet) {
+    const selectEnfant = document.getElementById("select-enfant-actif");
+    if (selectEnfant) {
+        selectEnfant.value = nomComplet;
+        changerEnfantActif();
+        initialiserSelecteurEnfants();
+    }
+};
 
 function obtenirInitiales(nomComplet) {
     if (!nomComplet) return "LE";
@@ -232,13 +314,9 @@ function obtenirInitiales(nomComplet) {
 }
 
 function mettreAJourAvatars(nomEnfant, photoUrl) {
-    const topbarAvatar = document.getElementById("topbar-child-avatar-container");
     const heroAvatar = document.getElementById("hero-child-avatar");
     const initiales = obtenirInitiales(nomEnfant);
-
     const avatarHtml = photoUrl ? `<img src="${photoUrl}" alt="${nomEnfant}">` : initiales;
-
-    if (topbarAvatar) topbarAvatar.innerHTML = avatarHtml;
     if (heroAvatar) heroAvatar.innerHTML = avatarHtml;
 }
 
@@ -265,6 +343,9 @@ window.switchParentTab = function(sectionId, element) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
+// =================================================================
+// MISE À JOUR GLOBAL DE TOUTES LES DONNÉES DE L'ENFANT SÉLECTIONNÉ
+// =================================================================
 function chargerDonneesParent() {
     const selectEnfant = document.getElementById("select-enfant-actif");
     const nomEnfantActif = selectEnfant ? selectEnfant.value : "Marc Mboundou";
@@ -282,6 +363,9 @@ function chargerDonneesParent() {
     const ecoleEnfant = dossierEnfant?.etablissement || selectedOption?.getAttribute("data-ecole") || "Lycée National Léon Mba";
     const classeEnfant = dossierEnfant?.classeDemandee || selectedOption?.getAttribute("data-classe") || "Terminale A1";
     const photoEnfant = dossierEnfant?.photoEleve || null;
+
+    // Mise à jour dynamique du carrousel d'images selon l'établissement
+    chargerCarrouselMediaParEcole(ecoleEnfant);
 
     mettreAJourAvatars(nomEnfantActif, photoEnfant);
 
@@ -342,7 +426,7 @@ function chargerDonneesParent() {
                 return `
                     <tr>
                         <td style="color: var(--text-muted); font-size: 0.85rem;">${n.date || '-'}</td>
-                        <td style="font-weight: 600; color: var(--primary);">${n.evaluation || 'Évaluation'}</td>
+                        <td style="font-weight: 600; color: var(--success);">${n.evaluation || 'Évaluation'}</td>
                         <td>${n.classe || '-'}</td>
                         <td style="font-weight: bold; color: var(--success);">${n.note} / 20</td>
                         <td style="font-style: italic; color: var(--text-muted);">${n.appreciation || '-'}</td>
@@ -387,7 +471,6 @@ function chargerDonneesParent() {
             presenceTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); font-style: italic; padding: 20px;">${dict.empty_presence}</td></tr>`;
         }
     }
-
     const statAbs = document.getElementById("stat-absences");
     const statRet = document.getElementById("stat-retards");
     if (statAbs) statAbs.textContent = nbAbsences;
@@ -425,7 +508,7 @@ function chargerDonneesParent() {
     }
 
     const htmlNotifications = notifications.length > 0 ? notifications.map(notif => `
-        <div style="background: var(--bg-body); padding: 14px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid var(--primary); border: 1px solid var(--border-color);">
+        <div style="background: var(--bg-body); padding: 14px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid var(--success); border: 1px solid var(--border-color);">
             <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--text-main); margin-bottom: 4px; font-size: 0.9rem;">
                 <span><i class="fa-solid fa-bullhorn" style="color: var(--success);"></i> ${notif.titre}</span>
                 <span style="font-size: 0.75rem; color: var(--text-muted);">${notif.date || 'Récemment'}</span>
@@ -469,7 +552,7 @@ window.rechercherResultatExamen = function() {
         const badgeClass = isAdmis ? "admis" : "refuse";
 
         let notesHtml = Object.entries(resultatTrouve.notes).map(([mat, note]) => `
-            <tr><td>${mat}</td><td style="font-weight: bold; color: var(--primary);">${note} / 20</td></tr>
+            <tr><td>${mat}</td><td style="font-weight: bold; color: var(--success);">${note} / 20</td></tr>
         `).join('');
 
         container.innerHTML = `
@@ -498,7 +581,6 @@ window.rechercherResultatExamen = function() {
         `;
     }
 };
-
 function chargerDocumentsAdministratifs() {
     const docsContainer = document.getElementById("parent-documents-list");
     if (!docsContainer) return;
@@ -513,7 +595,7 @@ function chargerDocumentsAdministratifs() {
     docsContainer.innerHTML = documentsAdmin.map(doc => `
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--border-color); gap: 10px;">
             <div style="display: flex; align-items: center; gap: 14px;">
-                <i class="fa-solid fa-file-shield" style="font-size: 1.6rem; color: var(--primary);"></i>
+                <i class="fa-solid fa-file-shield" style="font-size: 1.6rem; color: var(--success);"></i>
                 <div>
                     <h4 style="font-size: 0.92rem; font-weight: 700; color: var(--text-main);">${doc.titre}</h4>
                     <p style="font-size: 0.75rem; color: var(--text-muted);">${doc.categorie} • Émis le ${doc.date} • ${doc.taille}</p>
@@ -521,7 +603,7 @@ function chargerDocumentsAdministratifs() {
             </div>
             <div style="display: flex; gap: 8px;">
                 <button onclick="ouvrirDocumentAdministratif('${doc.titre}')" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;" title="Voir In-App"><i class="fa-solid fa-eye"></i></button>
-                <button onclick="telechargerDocumentAdministratif('${doc.titre}')" class="btn-action-primary" style="padding: 6px 12px; font-size: 0.78rem;" title="Télécharger"><i class="fa-solid fa-download"></i></button>
+                <button onclick="telechargerDocumentAdministratif('${doc.titre}')" class="btn-action-primary" style="padding: 6px 12px; font-size: 0.78rem; background: var(--success);" title="Télécharger"><i class="fa-solid fa-download"></i></button>
             </div>
         </div>
     `).join('');
@@ -548,7 +630,7 @@ function chargerHistoriqueFinancier() {
         <tr>
             <td style="color: var(--text-muted); font-size: 0.85rem;">${t.date}</td>
             <td style="font-weight: 600; color: var(--text-main);">${t.ref}</td>
-            <td><span style="font-weight: 600; color: var(--primary);">${t.operateur}</span></td>
+            <td><span style="font-weight: 600; color: var(--success);">${t.operateur}</span></td>
             <td style="font-weight: bold; color: var(--success);">${t.montant}</td>
             <td><span style="background: rgba(5, 150, 105, 0.1); color: var(--success); padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.8rem;">${t.statut}</span></td>
             <td>
@@ -616,7 +698,6 @@ window.ouvrirApercuFichier = function() {
         </html>
     `);
 };
-
 window.ouvrirModalJustification = function() {
     document.getElementById("modal-justification").classList.remove("modal-hidden");
 };

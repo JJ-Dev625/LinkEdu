@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LinkEdu — Espace Enseignant</title>
+  <link rel="stylesheet" href="prof.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="apprenant-body">
+
+  <div class="app-viewport-wrapper">
+
+    <!-- Top Bar -->
+    <header class="app-top-bar" role="banner">
+      <div class="app-brand">
+        <button class="burger-menu-btn" onclick="toggleSidebar()" aria-label="Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <img src="./images/log1.png" alt="LinkEdu - Clair" class="auth-logo logo-light">
+        <img src="./images/log2.png" alt="LinkEdu - Sombre" class="auth-logo logo-dark">
+        <span class="role-badge" data-i18n="prof_space_badge">Enseignant</span>
+      </div>
+
+      <div class="app-top-actions">
+        <button type="button" class="nav-action-btn" id="langToggleDesktop" aria-label="Changer de langue">
+          <i class="fa-solid fa-globe"></i> <span id="langTextDesktop">English</span>
+        </button>
+
+        <button type="button" id="themeToggleBtn" class="nav-action-btn" aria-label="Changer de thème">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+
+        <button type="button" class="nav-action-btn btn-logout" onclick="deconnecterEnseignant()" title="Se déconnecter">
+          <i class="fa-solid fa-power-off"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="layout-container">
+      <!-- Sidebar / Navigation Latérale -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="user-profile-sidebar" onclick="document.getElementById('input-prof-avatar').click()" title="Changer la photo de profil">
+            <div class="hero-avatar-box" id="prof-avatar-box">
+              <img src="i.jpg" alt="Profil Enseignant" class="profile-img" id="prof-img" onerror="this.style.display='none'">
+            </div>
+            <h3 class="user-name" id="prof-name">Mme. Iris AVOMO</h3>
+            <span class="role-text" id="prof-role">Prof. de Philosophie</span>
+            <span style="font-size: 0.7rem; color: var(--success); display: block; margin-top: 2px;">ID: <span id="prof-id-display">PROF-001</span></span>
+            <input type="file" id="input-prof-avatar" accept="image/*" style="display: none;" onchange="changerAvatarProf(event)">
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="#" class="sidebar-nav-item active" onclick="switchProfTab('dashboard', this)"><i class="fa-solid fa-gauge"></i> <span data-i18n="nav_dashboard">Tableau de bord</span></a>
+          <a href="#" class="sidebar-nav-item" onclick="switchProfTab('notes', this)"><i class="fa-solid fa-pen-nib"></i> <span data-i18n="nav_grades">Saisie des notes</span></a>
+          <a href="#" class="sidebar-nav-item" onclick="switchProfTab('cahier', this)"><i class="fa-solid fa-book"></i> <span data-i18n="nav_notebook">Cahier de texte</span></a>
+          <a href="#" class="sidebar-nav-item" onclick="switchProfTab('cours', this)"><i class="fa-solid fa-cloud-arrow-up"></i> <span data-i18n="nav_courses">Supports & Vidéos</span></a>
+          <a href="#" class="sidebar-nav-item" onclick="switchProfTab('devoirs', this)"><i class="fa-solid fa-calendar-plus"></i> <span data-i18n="nav_homework">Planifier Devoirs</span></a>
+          <a href="#" class="sidebar-nav-item" onclick="switchProfTab('emploi', this)"><i class="fa-solid fa-calendar-days"></i> <span data-i18n="nav_schedule">Emploi du temps</span></a>
+          <a href="#" class="sidebar-nav-item" onclick="switchProfTab('presence', this)"><i class="fa-solid fa-user-check"></i> <span data-i18n="nav_attendance">Appel & Justificatifs</span></a>
+          <a href="#" class="sidebar-nav-item" onclick="switchProfTab('messages', this)"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="nav_messages">Annonces & Messages</span></a>
+          <a href="#" class="sidebar-nav-item" onclick="switchProfTab('parametres', this)"><i class="fa-solid fa-key"></i> <span data-i18n="nav_settings">Sécurité & Mot de passe</span></a>
+        </nav>
+      </aside>
+
+      <!-- Contenu Principal -->
+      <main class="main-content" role="main">
+        
+        <!-- SECTION 1 : TABLEAU DE BORD -->
+        <section id="dashboard" class="app-section">
+          <div class="welcome-banner-card">
+            <div class="welcome-main-flex">
+              <div class="welcome-info">
+                <span class="welcome-subtitle" data-i18n="welcome_sub">Espace Pédagogique LinkEdu</span>
+                <h1 id="dashboard-welcome-title" class="welcome-title">Bienvenue, Mme. Iris AVOMO</h1>
+                <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 4px;" data-i18n="welcome_desc">Pilotez vos classes et suivez la progression des apprenants.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carrousel d'images Horizontal -->
+          <div class="card layout-card media-carousel-card">
+            <h3 class="card-subtitle"><i class="fa-solid fa-images text-success"></i> <span data-i18n="campus_gallery">Établissements & Vie Campus</span></h3>
+            <div class="horizontal-media-scroll" id="media-carousel-container"></div>
+          </div>
+
+          <div class="dashboard-grid-3">
+            <article class="card stat-card accent-blue">
+              <div class="stat-icon"><i class="fa-solid fa-school"></i></div>
+              <div class="stat-info">
+                <h3 data-i18n="stat_classes">Classes attribuées</h3>
+                <p id="count-classes" class="stat-value">0</p>
+              </div>
+            </article>
+
+            <article class="card stat-card accent-green">
+              <div class="stat-icon"><i class="fa-solid fa-user-graduate"></i></div>
+              <div class="stat-info">
+                <h3 data-i18n="stat_students">Étudiants encadrés</h3>
+                <p id="count-students" class="stat-value">0</p>
+              </div>
+            </article>
+
+            <article class="card stat-card accent-orange">
+              <div class="stat-icon"><i class="fa-solid fa-book-open"></i></div>
+              <div class="stat-info">
+                <h3 data-i18n="stat_sessions">Séances consignées</h3>
+                <p id="count-notes" class="stat-value">0</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="card layout-card alert-card-wrapper">
+            <h3 class="card-subtitle"><i class="fa-solid fa-chart-line text-success"></i> <span data-i18n="perf_title">Analyse & Alertes de Performance des Classes</span></h3>
+            <div id="dashboard-analytics-container">
+              <p style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;" data-i18n="perf_loading">Calcul en cours des moyennes de classes...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2 : SAISIE DES NOTES -->
+        <section id="notes" class="app-section" style="display: none;">
+          <h1 class="section-title" data-i18n="nav_grades">Saisie des notes & Évaluations</h1>
+          <div class="card layout-card">
+            <div style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 200px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_class">Classe concernée</label>
+                <select id="select-classe-notes" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);"></select>
+              </div>
+              <div style="flex: 1; min-width: 200px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_eval_title">Intitulé de l'évaluation</label>
+                <input type="text" id="input-eval-titre" placeholder="Ex: Devoir N°1 - Dissertation" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+              </div>
+            </div>
+
+            <h3 class="card-subtitle" style="margin-bottom: 12px;" data-i18n="students_list">Liste des étudiants / notes sur 20</h3>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th data-i18n="th_student">Nom & Prénom</th>
+                    <th data-i18n="th_grade">Note (/20)</th>
+                    <th data-i18n="th_feedback">Appréciation & Raccourcis</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-saisie-notes"></tbody>
+              </table>
+            </div>
+            <button type="button" class="btn-primary-action" style="margin-top: 20px;" onclick="sauvegarderNotes()">
+              <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_save_notes">Enregistrer et transmettre</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- SECTION 3 : CAHIER DE TEXTE -->
+        <section id="cahier" class="app-section" style="display: none;">
+          <h1 class="section-title" data-i18n="nav_notebook">Cahier de texte numérique</h1>
+          <div class="card layout-card">
+            <form id="cahierForm" class="interactive-form" onsubmit="soumettreCahierTexte(event)">
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_date">Date de la séance</label>
+                <input type="date" id="cahierDate" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_class">Classe concernée</label>
+                <select id="cahierClasse" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+                  <option value="">-- Choisir une classe --</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_summary">Résumé du cours magistral</label>
+                <textarea id="cahierContenu" rows="4" placeholder="Ex: Chapitre II..." required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);"></textarea>
+              </div>
+              <button type="submit" class="btn-primary-action">
+                <i class="fa-solid fa-check"></i> <span data-i18n="btn_save_session">Enregistrer la séance</span>
+              </button>
+            </form>
+            <div class="history-section" style="margin-top: 35px;">
+               <h3 class="card-subtitle" style="margin-bottom: 12px;" data-i18n="history_sessions">Historique des séances</h3>
+               <div id="cahierList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4 : SUPPORTS DE COURS & VIDÉOS -->
+        <section id="cours" class="app-section" style="display: none;">
+          <h1 class="section-title" data-i18n="nav_courses">Publication de Supports & Tutoriels</h1>
+          <div class="card layout-card">
+            <form id="coursForm" onsubmit="publierSupportCours(event)" class="interactive-form">
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_course_title">Titre du support ou chapitre</label>
+                <input type="text" id="coursTitre" placeholder="Ex: Chapitre 3" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_subject_class">Matière & Classe</label>
+                <input type="text" id="coursMatiere" placeholder="Ex: Philosophie - Terminale A1" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_video_link">Lien Vidéo Tutoriel (YouTube / Drive)</label>
+                <input type="url" id="coursVideo" placeholder="https://youtube.com/..." style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+              </div>
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_attach_doc">Joindre le document PDF depuis l'appareil</label>
+                <input type="file" id="coursFile" accept="application/pdf,image/*" style="width:100%; padding:8px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);" onchange="chargerFichierSupportLocal(this)">
+                <span id="nom-fichier-joint" style="font-size:0.75rem; color:var(--success); margin-top:4px; display:block;"></span>
+              </div>
+              <button type="submit" class="btn-primary-action success-bg">
+                <i class="fa-solid fa-upload"></i> <span data-i18n="btn_publish">Publier pour les Élèves</span>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- SECTION 5 : PLANIFIER DEVOIRS -->
+        <section id="devoirs" class="app-section" style="display: none;">
+          <h1 class="section-title" data-i18n="nav_homework">Calendrier des Devoirs & Compositions</h1>
+          <div class="card layout-card">
+            <form id="devoirForm" onsubmit="publierDevoirAdministratif(event)" class="interactive-form">
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_hw_title">Matière & Intitulé du devoir</label>
+                <input type="text" id="devoirTitre" placeholder="Ex: Devoir Surveillé N°2" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_hw_date">Date limite / Échéance</label>
+                <input type="text" id="devoirDate" placeholder="Ex: 25 Mars 2026" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+              </div>
+              <button type="submit" class="btn-primary-action">
+                <i class="fa-solid fa-calendar-check"></i> <span data-i18n="btn_add_hw">Ajouter au Programme de l'Élève</span>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- SECTION 6 : EMPLOI DU TEMPS (Attribué par l'Admin) -->
+        <section id="emploi" class="app-section" style="display: none;">
+          <h1 class="section-title" data-i18n="nav_schedule">Emploi du temps</h1>
+          <div class="card layout-card">
+            <div id="emploi-container"></div>
+          </div>
+        </section>
+
+        <!-- SECTION 7 : APPEL & JUSTIFICATIFS -->
+        <section id="presence" class="app-section" style="display: none;">
+          <h1 class="section-title" data-i18n="nav_attendance">Appel & Validation des Justificatifs</h1>
+          <div class="card layout-card" style="margin-bottom: 24px; border-left: 5px solid var(--success);">
+            <h3 class="card-subtitle"><i class="fa-solid fa-file-signature text-success"></i> <span data-i18n="justif_title">Justificatifs d'absence soumis</span></h3>
+            <div id="liste-justificatifs-eleves">
+              <p style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;" data-i18n="no_justif">Aucun justificatif en attente.</p>
+            </div>
+          </div>
+          <div class="card layout-card">
+            <div style="margin-bottom: 16px;">
+              <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_class">Classe concernée</label>
+              <select id="select-classe-appel" style="width:100%; max-width:300px; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);"></select>
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th data-i18n="th_student">Étudiant</th>
+                    <th style="text-align:center;" data-i18n="th_status">Statut</th>
+                    <th style="text-align:center;" data-i18n="th_action">Action Rapide</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-appel"></tbody>
+              </table>
+            </div>
+            <button type="button" class="btn-primary-action" style="margin-top: 20px;" onclick="validerAppel()">
+              <i class="fa-solid fa-clipboard-check"></i> <span data-i18n="btn_validate_attendance">Valider l'appel</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- SECTION 8 : ANNONCES -->
+        <section id="messages" class="app-section" style="display: none;">
+          <h1 class="section-title" data-i18n="nav_messages">Diffusion de messages / Annonces</h1>
+          <div class="card layout-card">
+            <form id="messageForm" onsubmit="envoyerAnnonceClasse(event)" class="interactive-form">
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_target_class">Classe destinataire</label>
+                <select id="msgClasse" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+                  <option value="">-- Choisir une classe --</option>
+                  <option value="Toutes">Toutes mes classes</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_msg_title">Objet de l'annonce</label>
+                <input type="text" id="msgTitre" placeholder="Ex: TD Vendredi" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+              </div>
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;" data-i18n="label_msg_content">Message détaillé</label>
+                <textarea id="msgContenu" rows="4" placeholder="Ex: N'oubliez pas..." required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);"></textarea>
+              </div>
+              <button type="submit" class="btn-primary-action">
+                <i class="fa-solid fa-paper-plane"></i> <span data-i18n="btn_broadcast">Diffuser l'annonce</span>
+              </button>
+            </form>
+            <div class="history-section" style="margin-top: 35px;">
+              <h3 class="card-subtitle" style="margin-bottom: 12px;" data-i18n="history_announcements">Annonces récemment envoyées</h3>
+              <div id="messagesHistoriqueList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 9 : SÉCURITÉ & CHANGEMENT DE MOT DE PASSE -->
+        <section id="parametres" class="app-section" style="display: none;">
+          <h1 class="section-title" data-i18n="nav_settings">Sécurité & Mot de passe</h1>
+          <div class="card layout-card">
+            <form onsubmit="changerMotDePasseEnseignant(event)" class="interactive-form">
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;">ID Enseignant (Fixe)</label>
+                <input type="text" id="setting-prof-id" readonly style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-muted); font-weight:700;">
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label style="font-weight:600; font-size:0.85rem; color:var(--text-main); display:block; margin-bottom:6px;">Nouveau mot de passe</label>
+                <input type="password" id="setting-new-password" placeholder="Entrez le nouveau mot de passe" required style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main);">
+              </div>
+              <button type="submit" class="btn-primary-action success-bg">
+                <i class="fa-solid fa-key"></i> Mettre à jour mon mot de passe
+              </button>
+            </form>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- Footer Institutionnel -->
+    <footer class="app-footer">
+      <p data-i18n="footer_text">LinkEdu © 2026 | Système d'Information Académique & Pédagogique</p>
+    </footer>
+
+  </div>
+
+  <script src="prof.js"></script>
+</body>
+</html>

@@ -13,9 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
             nav_docs: "Documents",
             welcome_sub: "Heureux de vous revoir",
             stat_avg: "Moyenne Générale",
+            stat_hours_absent: "Volume d'Absences",
             stat_tuition: "Statut Scolarité",
             schedule_title: "Emploi du temps de la classe",
             ticker_title: "Flash Info :",
+            campus_gallery_title: "Établissements & Vie Campus",
             widget_exam_title: "Portail des Examens Nationaux (CEP, BEPC, BAC)",
             widget_exam_desc: "Consultez les résultats officiels de fin d'année à l'aide de votre numéro de composition.",
             widget_exam_btn: "Vérifier un résultat",
@@ -39,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
             empty_schedule: "Aucun emploi du temps configuré pour cette classe.",
             empty_notes: "Aucune note enregistrée pour le moment.",
             empty_presence: "Aucun incident de présence enregistré.",
+            alerts_recommendations_title: "Avertissements Pédagogiques & Pistes d'Amélioration",
             notif_modal_title: "Centre de Notifications & Messages",
             btn_justify_absence: "Justifier une absence",
             modal_justify_title: "Soumettre un justificatif d'absence",
@@ -58,9 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
             nav_docs: "Documents",
             welcome_sub: "Welcome back",
             stat_avg: "Overall Average",
+            stat_hours_absent: "Absence Volume",
             stat_tuition: "Tuition Status",
             schedule_title: "Class Schedule",
             ticker_title: "Flash Info:",
+            campus_gallery_title: "Campuses & School Life",
             widget_exam_title: "National Exams Portal (CEP, BEPC, BAC)",
             widget_exam_desc: "Check official end-of-year results using your composition number.",
             widget_exam_btn: "Check a Result",
@@ -84,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             empty_schedule: "No schedule configured for this class.",
             empty_notes: "No grades recorded yet.",
             empty_presence: "No attendance incidents recorded.",
+            alerts_recommendations_title: "Academic Warnings & Improvement Tips",
             notif_modal_title: "Notifications & Messages Center",
             btn_justify_absence: "Justify an Absence",
             modal_justify_title: "Submit an Absence Justification",
@@ -180,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // =================================================================
-    // 3. CHARGEMENT PROFIL
+    // 3. CHARGEMENT PROFIL & CARROUSEL DYNAMIQUE
     // =================================================================
     const candidatures = JSON.parse(localStorage.getItem("candidatures")) || [];
     const sessionUser = JSON.parse(localStorage.getItem("linkedu_user") || sessionStorage.getItem("linkedu_user") || "null");
@@ -194,11 +200,12 @@ document.addEventListener("DOMContentLoaded", () => {
         paye: true
     };
 
-    const nomComplet = `${apprenantActif.prenom || apprenantActif.nom || 'Apprenant'}`.trim();
+    const nomComplet = `${apprenantActif.prenom || ''} ${apprenantActif.nom || 'Apprenant'}`.trim();
+    const ecoleActive = apprenantActif.etablissement || "École 241";
     const classeActive = apprenantActif.classeDemandee || apprenantActif.classe || "Terminale Web & Mobile";
 
     document.getElementById("apprenant-nom").textContent = nomComplet;
-    document.getElementById("apprenant-ecole").textContent = apprenantActif.etablissement || "École 241";
+    document.getElementById("apprenant-ecole").textContent = ecoleActive;
     document.getElementById("apprenant-classe").textContent = classeActive;
     document.getElementById("apprenant-matricule").textContent = apprenantActif.matricule || "LE-2026-0941";
 
@@ -220,87 +227,248 @@ document.addEventListener("DOMContentLoaded", () => {
         statScolarite.style.color = "#f59e0b";
     }
 
+    chargerCarrouselMediaParEcole(ecoleActive);
+
     // =================================================================
-    // 4. CHARGEMENT MODULES
+    // 4. CHARGEMENT MODULES (EMPLOI DU TEMPS, DEVOIRS, NOTES, PRÉSENCE)
     // =================================================================
-    chargerNotesEtCalculMoyennes(nomComplet);
-    chargerPresenceApprenant(nomComplet);
+    chargerNotesEtCalculMoyennes(nomComplet, ecoleActive);
+    chargerPresenceEtVolumeHoraire(nomComplet, ecoleActive);
     chargerCoursEtSupports();
     chargerEmploiDuTempsClasse(classeActive);
+    chargerProgrammeDevoirs(classeActive);
     chargerDocumentsApprenant();
     chargerMarqueeEtNotifications();
 });
 
-// =================================================================
-// BASCULE DU VOLET EXAMENS (STYLE PARENT)
-// =================================================================
-window.basculerVoletExamens = function() {
-    const volet = document.getElementById("volet-examens-deroulant");
-    if (volet) {
-        if (volet.style.display === "none" || volet.style.display === "") {
-            volet.style.display = "block";
-        } else {
-            volet.style.display = "none";
-        }
+window.deconnecterUtilisateur = function() {
+    if (confirm("Voulez-vous vraiment vous déconnecter de LinkEdu ?")) {
+        localStorage.removeItem("linkedu_user");
+        sessionStorage.removeItem("linkedu_user");
+        window.location.href = "index.html";
     }
 };
 
-function chargerNotesEtCalculMoyennes(nomApprenant) {
-    const tbody = document.getElementById("apprenant-notes-tbody");
-    const statMoyenne = document.getElementById("stat-moyenne");
-    if (!tbody) return;
+function chargerCarrouselMediaParEcole(nomEcole) {
+    const container = document.getElementById("media-carousel-container");
+    if (!container) return;
 
-    const toutesLesNotes = JSON.parse(localStorage.getItem("notesEleves")) || [];
-    const notesFiltrees = toutesLesNotes.filter(n => n.eleve && n.eleve.toLowerCase().includes(nomApprenant.toLowerCase().split(' ')[0]));
-
-    let sommeTotale = 0;
-    let nombreNotes = 0;
-
-    if (notesFiltrees.length > 0) {
-        tbody.innerHTML = notesFiltrees.map(n => {
-            const val = parseFloat(n.note);
-            if (!isNaN(val)) { sommeTotale += val; nombreNotes++; }
-            return `
-                <tr>
-                    <td style="color: var(--text-muted); font-size: 0.85rem;">${n.date || '-'}</td>
-                    <td style="font-weight: 600; color: var(--primary);">${n.evaluation || 'Évaluation'}</td>
-                    <td>${n.classe || '-'}</td>
-                    <td style="font-weight: bold; color: var(--success);">${n.note} / 20</td>
-                    <td style="font-style: italic; color: var(--text-muted);">${n.appreciation || '-'}</td>
-                </tr>
-            `;
-        }).join('');
-
-        if (statMoyenne && nombreNotes > 0) {
-            statMoyenne.textContent = `${(sommeTotale / nombreNotes).toFixed(2)} / 20`;
-        }
+    let galeriesMediaDB = [];
+    if (nomEcole.toLowerCase().includes("bikélé") || nomEcole.toLowerCase().includes("ces")) {
+        galeriesMediaDB = [
+            { titre: "CES de Bikélé", categorie: "Établissement Principal", url: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=500&q=80" },
+            { titre: "Cour Centrale & Salles de classe", categorie: "Infrastructures", url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=500&q=80" },
+            { titre: "Activités Sportives Collège", categorie: "Vie Scolaire", url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=500&q=80" }
+        ];
     } else {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); font-style: italic; padding: 20px;">Aucune note enregistrée pour le moment.</td></tr>`;
-        if (statMoyenne) statMoyenne.textContent = "14.5 / 20";
+        galeriesMediaDB = [
+            { titre: "École 241 & Campus", categorie: "Établissement", url: "./images/log1.png" },
+            { titre: "Laboratoire Numérique & Code", categorie: "Infrastructures", url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80" },
+            { titre: "Soutenance & Projets PWS", categorie: "Vie Campus", url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=500&q=80" }
+        ];
     }
+
+    container.innerHTML = galeriesMediaDB.map((m) => `
+        <div class="media-item-card" onclick="alert('${m.titre} - ${m.categorie}')">
+            <img src="${m.url}" alt="${m.titre}" onerror="this.src='https://via.placeholder.com/260x130?text=LinkEdu+Campus'">
+            <div class="media-overlay-info">
+                <span>${m.titre}</span>
+                <i class="fa-solid fa-expand" style="font-size: 0.7rem; opacity: 0.8;"></i>
+            </div>
+        </div>
+    `).join('');
 }
 
+window.basculerVoletExamens = function() {
+    const volet = document.getElementById("volet-examens-deroulant");
+    if (volet) {
+        volet.style.display = (volet.style.display === "none" || volet.style.display === "") ? "block" : "none";
+    }
+};
+
+// =================================================================
+// EMPLOI DU TEMPS DYNAMIQUE (Connecté Admin)
+// =================================================================
 function chargerEmploiDuTempsClasse(classeActive) {
     const container = document.getElementById("apprenant-planning-du-jour");
     if (!container) return;
 
     const adminSchedule = JSON.parse(localStorage.getItem("adminSchedule")) || [];
-    const planningClasse = adminSchedule.filter(s => !s.classe || s.classe.toLowerCase() === classeActive.toLowerCase());
+    const planningClasse = adminSchedule.filter(s => 
+        s.classe && s.classe.toLowerCase().trim() === classeActive.toLowerCase().trim()
+    );
 
-    const planningsAffiches = planningClasse.length > 0 ? planningClasse : [
-        { time: "08:30 - 11:30", matiere: "Algorithmique & JavaScript Avancé", prof: "M. Paul Yurick", salle: "Labo 1" },
-        { time: "13:00 - 16:00", matiere: "UI/UX Design & Maquettage Figma", prof: "Équipe Pédagogique", salle: "Salle Mac" }
+    if (planningClasse.length > 0) {
+        container.innerHTML = planningClasse.map(c => `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--bg-body); border-radius: 10px; margin-bottom: 8px; border-left: 4px solid var(--primary);">
+                <div>
+                    <h4 style="font-size: 0.92rem; font-weight: 700; color: var(--text-main);">${c.matiere}</h4>
+                    <p style="font-size: 0.78rem; color: var(--text-muted);"><i class="fa-solid fa-chalkboard-user"></i> ${c.prof || 'Professeur'} • <i class="fa-solid fa-location-dot"></i> ${c.salle || 'Salle principale'}</p>
+                </div>
+                <span style="font-size: 0.75rem; font-weight: 700; background: rgba(30, 58, 138, 0.1); color: var(--primary); padding: 4px 10px; border-radius: 8px;">${c.time || c.horaire || '08:30 - 11:30'}</span>
+            </div>
+        `).join('');
+    } else {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 15px; color: var(--text-muted); font-size: 0.85rem; font-style: italic;">
+                <i class="fa-solid fa-calendar-xmark" style="font-size: 1.2rem; margin-bottom: 6px; display: block;"></i>
+                Aucun emploi du temps publié par l'administration pour la classe de <strong>${classeActive}</strong>.
+            </div>
+        `;
+    }
+}
+
+// =================================================================
+// PROGRAMME DES DEVOIRS & ÉVALUATIONS DYNAMIQUE
+// =================================================================
+function chargerProgrammeDevoirs(classeActive) {
+    const container = document.getElementById("apprenant-programme-devoirs-list");
+    if (!container) return;
+
+    // Récupération depuis le localStorage (publié par l'admin ou les enseignants)
+    const adminDevoirs = JSON.parse(localStorage.getItem("adminProgrammeDevoirs")) || [];
+    const devoirsClasse = adminDevoirs.filter(d => 
+        !d.classe || d.classe.toLowerCase().trim() === classeActive.toLowerCase().trim()
+    );
+
+    // Devoirs par défaut si l'admin n'a rien saisi
+    const devoirsAffiches = devoirsClasse.length > 0 ? devoirsClasse : [
+        { matiere: "Algorithmique & JavaScript", titre: "Projet Pratique : Application Web PWA", date: "15 Mars 2026", type: "Devoir Surveillé" },
+        { matiere: "UI/UX Design", titre: "Rendu des maquettes Figma Mobile-First", date: "22 Mars 2026", type: "Évaluation Continue" }
     ];
 
-    container.innerHTML = planningsAffiches.map(c => `
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--bg-body); border-radius: 10px; margin-bottom: 8px; border-left: 4px solid var(--primary);">
-            <div>
-                <h4 style="font-size: 0.92rem; font-weight: 700; color: var(--text-main);">${c.matiere}</h4>
-                <p style="font-size: 0.78rem; color: var(--text-muted);"><i class="fa-solid fa-chalkboard-user"></i> ${c.prof || 'Professeur'} • <i class="fa-solid fa-location-dot"></i> ${c.salle || 'Salle principale'}</p>
+    container.innerHTML = devoirsAffiches.map(d => `
+        <div class="devoir-item-card">
+            <div class="devoir-info">
+                <h4>${d.matiere} — ${d.titre}</h4>
+                <p><i class="fa-solid fa-tag"></i> ${d.type || 'Devoir'} • Publié par l'Administration</p>
             </div>
-            <span style="font-size: 0.75rem; font-weight: 700; background: rgba(30, 58, 138, 0.1); color: var(--primary); padding: 4px 10px; border-radius: 8px;">${c.time || c.horaire}</span>
+            <span class="devoir-badge-date"><i class="fa-solid fa-calendar-day"></i> ${d.date}</span>
         </div>
     `).join('');
+}
+
+window.telechargerProgrammeDevoirsPDF = function() {
+    alert("Téléchargement du calendrier officiel des devoirs et compositions au format PDF.");
+};
+
+// =================================================================
+// NOTES, SEUILS D'AVERTISSEMENT & PISTES D'AMÉLIORATION
+// =================================================================
+function chargerNotesEtCalculMoyennes(nomApprenant, nomEcole) {
+    const tbody = document.getElementById("apprenant-notes-tbody");
+    const statMoyenne = document.getElementById("stat-moyenne");
+    const widgetAlertes = document.getElementById("widget-alertes-pistes");
+    const conteneurAlertes = document.getElementById("conteneur-alertes-dynamiques");
+    if (!tbody) return;
+
+    const seuilAlerte = (nomEcole.toLowerCase().includes("école 241") || nomEcole.toLowerCase().includes("centre")) ? 12 : 10;
+    const toutesLesNotes = JSON.parse(localStorage.getItem("notesEleves")) || [];
+    const notesFiltrees = toutesLesNotes.filter(n => n.eleve && n.eleve.toLowerCase().includes(nomApprenant.toLowerCase().split(' ')[0]));
+
+    let sommeTotale = 0;
+    let nombreNotes = 0;
+    let matieresEnDifficulte = [];
+
+    if (notesFiltrees.length > 0) {
+        tbody.innerHTML = notesFiltrees.map(n => {
+            const val = parseFloat(n.note);
+            if (!isNaN(val)) {
+                sommeTotale += val;
+                nombreNotes++;
+                if (val < seuilAlerte) {
+                    matieresEnDifficulte.push({ eval: n.evaluation, matiere: n.classe || 'Matière', note: val });
+                }
+            }
+
+            const isFaible = !isNaN(val) && val < seuilAlerte;
+            const styleNote = isFaible ? "color: #ef4444; font-weight: bold;" : "color: var(--success); font-weight: bold;";
+
+            return `
+                <tr>
+                    <td style="color: var(--text-muted); font-size: 0.85rem;">${n.date || '-'}</td>
+                    <td style="font-weight: 600; color: var(--primary);">${n.evaluation || 'Évaluation'}</td>
+                    <td>${n.classe || '-'}</td>
+                    <td style="${styleNote}">${n.note} / 20 ${isFaible ? '<i class="fa-solid fa-triangle-exclamation" title="Note sous le seuil requis"></i>' : ''}</td>
+                    <td style="font-style: italic; color: var(--text-muted);">${n.appreciation || (isFaible ? 'Attention, consolidation requise.' : 'Bon travail.')}</td>
+                </tr>
+            `;
+        }).join('');
+
+        const moyenneGenerale = nombreNotes > 0 ? (sommeTotale / nombreNotes) : 14.5;
+        if (statMoyenne) statMoyenne.textContent = `${moyenneGenerale.toFixed(2)} / 20`;
+
+        if (matieresEnDifficulte.length > 0 && widgetAlertes && conteneurAlertes) {
+            widgetAlertes.style.display = "block";
+            conteneurAlertes.innerHTML = matieresEnDifficulte.map(m => `
+                <div style="background: var(--bg-body); padding: 12px; border-radius: 10px; border-left: 4px solid #ef4444; font-size: 0.85rem;">
+                    <div style="font-weight: 700; color: var(--text-main); margin-bottom: 2px;">
+                        <i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> Alerte note faible : ${m.eval} (${m.note}/20)
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 6px;">Votre note en ${m.matiere} est en dessous du seuil requis (${seuilAlerte}/20). Une révision ciblée est conseillée.</p>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <span style="font-weight: 600; font-size: 0.78rem; color: var(--primary);"><i class="fa-solid fa-lightbulb"></i> Pistes & Sources :</span>
+                        <a href="#cours" onclick="switchApprenantTab('cours')" style="font-size: 0.78rem; background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 6px; text-decoration: none;">Consulter les supports de cours</a>
+                        <a href="https://developer.mozilla.org" target="_blank" style="font-size: 0.78rem; background: var(--bg-wrapper); border: 1px solid var(--border-color); color: var(--text-main); padding: 4px 10px; border-radius: 6px; text-decoration: none;"><i class="fa-solid fa-globe"></i> Documentation externe recommandée</a>
+                    </div>
+                </div>
+            `).join('');
+        } else if (widgetAlertes) {
+            widgetAlertes.style.display = "none";
+        }
+
+    } else {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); font-style: italic; padding: 20px;">Aucune note enregistrée pour le moment.</td></tr>`;
+        if (statMoyenne) statMoyenne.textContent = "14.5 / 20";
+        if (widgetAlertes) widgetAlertes.style.display = "none";
+    }
+}
+
+// =================================================================
+// VOLUME HORAIRE D'ABSENCES
+// =================================================================
+function chargerPresenceEtVolumeHoraire(nomApprenant, nomEcole) {
+    const tbody = document.getElementById("apprenant-presence-tbody");
+    const statHeuresAbsences = document.getElementById("stat-heures-absences");
+    if (!tbody) return;
+
+    const heuresParAbsence = (nomEcole.toLowerCase().includes("école 241") || nomEcole.toLowerCase().includes("centre")) ? 3 : 2;
+    const toutLeSuivi = JSON.parse(localStorage.getItem("suiviPresence")) || [];
+    const suiviFiltre = toutLeSuivi.filter(s => s.eleve && s.eleve.toLowerCase().includes(nomApprenant.toLowerCase().split(' ')[0]));
+
+    let totalAbsencesCount = 0;
+
+    if (suiviFiltre.length > 0) {
+        tbody.innerHTML = suiviFiltre.map(s => {
+            if (s.statut === "Absent") totalAbsencesCount++;
+
+            let badgeBg = "rgba(5, 150, 105, 0.1)"; let badgeColor = "var(--success)";
+            if (s.statut === "Absent") { badgeBg = "rgba(239, 68, 68, 0.1)"; badgeColor = "#ef4444"; }
+            if (s.statut === "Retard") { badgeBg = "rgba(245, 158, 11, 0.1)"; badgeColor = "#f59e0b"; }
+
+            return `
+                <tr>
+                    <td style="color: var(--text-muted); font-size: 0.85rem;">${s.date || '-'}</td>
+                    <td><span style="background: ${badgeBg}; color: ${badgeColor}; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.8rem;">${s.statut}</span></td>
+                    <td><span style="font-size: 0.85rem; color: var(--text-muted);">${s.justification || 'Aucun motif particulier'}</span></td>
+                </tr>
+            `;
+        }).join('');
+    } else {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic; padding: 20px;">Aucun incident de présence enregistré ce mois.</td></tr>`;
+    }
+
+    const volumeTotalHeures = totalAbsencesCount * heuresParAbsence;
+    if (statHeuresAbsences) {
+        statHeuresAbsences.textContent = `${volumeTotalHeures} h`;
+        if (volumeTotalHeures >= 10) {
+            statHeuresAbsences.style.color = "#ef4444";
+        } else if (volumeTotalHeures > 0) {
+            statHeuresAbsences.style.color = "#f59e0b";
+        } else {
+            statHeuresAbsences.style.color = "var(--success)";
+        }
+    }
 }
 
 function chargerCoursEtSupports() {
@@ -328,32 +496,6 @@ function chargerCoursEtSupports() {
             </div>
         </div>
     `).join('');
-}
-
-function chargerPresenceApprenant(nomApprenant) {
-    const tbody = document.getElementById("apprenant-presence-tbody");
-    if (!tbody) return;
-
-    const toutLeSuivi = JSON.parse(localStorage.getItem("suiviPresence")) || [];
-    const suiviFiltre = toutLeSuivi.filter(s => s.eleve && s.eleve.toLowerCase().includes(nomApprenant.toLowerCase().split(' ')[0]));
-
-    if (suiviFiltre.length > 0) {
-        tbody.innerHTML = suiviFiltre.map(s => {
-            let badgeBg = "rgba(5, 150, 105, 0.1)"; let badgeColor = "var(--success)";
-            if (s.statut === "Absent") { badgeBg = "rgba(239, 68, 68, 0.1)"; badgeColor = "#ef4444"; }
-            if (s.statut === "Retard") { badgeBg = "rgba(245, 158, 11, 0.1)"; badgeColor = "#f59e0b"; }
-
-            return `
-                <tr>
-                    <td style="color: var(--text-muted); font-size: 0.85rem;">${s.date || '-'}</td>
-                    <td><span style="background: ${badgeBg}; color: ${badgeColor}; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.8rem;">${s.statut}</span></td>
-                    <td><span style="font-size: 0.85rem; color: var(--text-muted);">${s.justification || 'Aucun motif particulier'}</span></td>
-                </tr>
-            `;
-        }).join('');
-    } else {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic; padding: 20px;">Aucun incident de présence enregistré ce mois.</td></tr>`;
-    }
 }
 
 function chargerDocumentsApprenant() {
@@ -518,6 +660,7 @@ window.soumettreJustification = function(e) {
     const motifAbsence = document.getElementById("justif-motif").value;
     const candidatures = JSON.parse(localStorage.getItem("candidatures")) || [];
     const nomEnfant = candidatures[0] ? `${candidatures[0].prenom} ${candidatures[0].nom}` : "Jean Junior";
+    const ecoleActive = candidatures[0]?.etablissement || "École 241";
 
     let toutLeSuivi = JSON.parse(localStorage.getItem("suiviPresence")) || [];
     toutLeSuivi.push({
@@ -533,5 +676,5 @@ window.soumettreJustification = function(e) {
     localStorage.setItem("suiviPresence", JSON.stringify(toutLeSuivi));
     fermerModalJustification();
     alert("Justificatif transmis avec succès à l'administration.");
-    chargerPresenceApprenant(nomEnfant);
+    chargerPresenceEtVolumeHoraire(nomEnfant, ecoleActive);
 };

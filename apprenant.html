@@ -33,6 +33,10 @@
         <button type="button" id="themeToggleBtn" class="nav-action-btn" aria-label="Changer de thème">
           <i class="fa-solid fa-moon" id="themeIcon"></i>
         </button>
+
+        <button type="button" class="nav-action-btn btn-logout" onclick="deconnecterUtilisateur()" title="Se déconnecter" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2);">
+          <i class="fa-solid fa-power-off"></i>
+        </button>
       </div>
     </header>
 
@@ -58,7 +62,7 @@
     <!-- Contenu Principal -->
     <main class="main-content" role="main">
       
-      <!-- RUBAN D'ANNONCES DÉFILANT (Avec marge de séparation corrigée) -->
+      <!-- Ruban d'annonces défilant -->
       <div class="announcement-ticker-container">
         <div class="ticker-label"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="ticker_title">Flash Info :</span></div>
         <div class="ticker-wrapper">
@@ -90,8 +94,19 @@
           </div>
         </div>
 
-        <!-- KPIs Académiques -->
-        <div class="dashboard-grid">
+        <!-- Carrousel d'images Horizontal -->
+        <div class="card layout-card media-carousel-card">
+          <div class="carousel-header" style="margin-bottom: 12px;">
+            <h3 class="card-subtitle" style="margin: 0;">
+              <i class="fa-solid fa-images text-success"></i> 
+              <span data-i18n="campus_gallery_title">Établissements & Vie Campus</span>
+            </h3>
+          </div>
+          <div class="horizontal-media-scroll" id="media-carousel-container"></div>
+        </div>
+
+        <!-- KPIs Académiques (3 cartes dynamiques : Moyenne, Absences en Heures, Statut Scolarité) -->
+        <div class="dashboard-grid-3">
           <article class="card stat-card accent-blue">
             <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
             <div class="stat-info">
@@ -100,13 +115,27 @@
             </div>
           </article>
 
+          <article class="card stat-card accent-orange">
+            <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="stat-info">
+              <h3 data-i18n="stat_hours_absent">Volume d'Absences</h3>
+              <p id="stat-heures-absences" class="stat-value">0 h</p>
+            </div>
+          </article>
+
           <article class="card stat-card accent-green">
             <div class="stat-icon"><i class="fa-solid fa-wallet"></i></div>
             <div class="stat-info">
               <h3 data-i18n="stat_tuition">Statut Scolarité</h3>
-              <p id="stat-scolarite" class="stat-value" style="font-size: 1rem;">Chargement...</p>
+              <p id="stat-scolarite" class="stat-value" style="font-size: 0.95rem;">Chargement...</p>
             </div>
           </article>
+        </div>
+
+        <!-- WIDGET AVERTISSEMENTS & PISTES D'AMÉLIORATION (Généré dynamiquement) -->
+        <div class="card layout-card" id="widget-alertes-pistes" style="display: none; border-left: 5px solid #f59e0b;">
+          <h3 class="card-subtitle"><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> <span data-i18n="alerts_recommendations_title">Avertissements Pédagogiques & Pistes d'Amélioration</span></h3>
+          <div id="conteneur-alertes-dynamiques" style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;"></div>
         </div>
 
         <!-- Widget Emploi du Temps du jour -->
@@ -116,8 +145,20 @@
             <p class="empty-text" data-i18n="empty_schedule">Aucun cours planifié pour aujourd'hui.</p>
           </div>
         </div>
+                <!-- WIDGET PROGRAMME DES DEVOIRS & ÉVALUATIONS -->
+        <div class="card layout-card" style="border-left: 5px solid var(--success);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+            <h3 class="card-subtitle" style="margin: 0;"><i class="fa-solid fa-file-pen text-success"></i> Programme des Devoirs & Évaluations</h3>
+            <button type="button" class="btn-secondary" onclick="telechargerProgrammeDevoirsPDF()" style="padding: 6px 12px; font-size: 0.78rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> Version PDF Officielle
+            </button>
+          </div>
+          <div id="apprenant-programme-devoirs-list">
+            <p class="empty-text">Aucun devoir ou composition programmé pour le moment.</p>
+          </div>
+        </div>
 
-        <!-- WIDGET EXAMENS NATIONAUX (Style Parent - Déroulable au clic) -->
+        <!-- Widget Examens Nationaux -->
         <div class="card layout-card" style="background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(5, 150, 105, 0.05)); border: 1px solid var(--primary);">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
             <div>
@@ -129,7 +170,6 @@
             </button>
           </div>
 
-          <!-- Volet déroulant des examens (Caché par défaut) -->
           <div id="volet-examens-deroulant" style="display: none; margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
             <div style="display: flex; flex-direction: column; gap: 12px;">
               <div style="display: flex; gap: 10px; width: 100%; flex-wrap: wrap;">
@@ -172,7 +212,7 @@
 
       <!-- SECTION 3 : NOTES -->
       <section id="notes" class="app-section" style="display: none;">
-        <h1 class="section-title" data-i18n="nav_grades">Suivi des Notes & Calcul Automatique</h1>
+        <h1 class="section-title" data-i18n="nav_grades">Suivi des Notes & Avertissements</h1>
         <div class="card layout-card">
           <div class="table-responsive">
             <table>
@@ -194,7 +234,7 @@
       <!-- SECTION 4 : VIE SCOLAIRE -->
       <section id="vie-scolaire" class="app-section" style="display: none;">
         <div class="section-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h1 class="section-title" style="margin: 0;" data-i18n="nav_life">Journal de Présence & Absences</h1>
+          <h1 class="section-title" style="margin: 0;" data-i18n="nav_life">Journal de Présence & Volume Horaire</h1>
           <button type="button" class="btn-primary-action" onclick="ouvrirModalJustification()" style="padding: 8px 14px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
             <i class="fa-solid fa-file-signature"></i> <span data-i18n="btn_justify_absence">Justifier une absence</span>
           </button>
@@ -247,7 +287,7 @@
 
   </div>
 
-  <!-- MODALE JUSTIFICATION D'ABSENCE (Avec l'icône de l'œil parfaitement insérée) -->
+  <!-- Modale Justification d'absence -->
   <div id="modal-justification" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; z-index:2000; justify-content:center; align-items:center;">
     <div onclick="fermerModalJustification()" style="position:absolute; width:100%; height:100%; background:rgba(0,0,0,0.5);"></div>
     <div style="position:relative; background:var(--bg-wrapper); padding:24px; border-radius:16px; width:90%; max-width:450px; z-index:2001; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
@@ -265,7 +305,6 @@
         </div>
         <div style="margin-bottom: 16px;">
           <label style="font-size: 0.78rem; font-weight:600; display:block; margin-bottom:4px;" data-i18n="label_absence_file">Pièce justificative (PDF ou Image) *</label>
-          <!-- Conteneur flex bien délimité pour l'input et l'œil -->
           <div style="display: flex; gap: 8px; align-items: center; width: 100%;">
             <input type="file" id="justif-file" accept="image/*, application/pdf" required style="padding: 6px; flex: 1; font-size:0.75rem; min-width: 0;" onchange="previsualiserFichierSelectionne(this)">
             <button type="button" id="btn-apercu-file" style="display:none; padding: 10px 14px; font-size: 0.8rem; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main); cursor:pointer; flex-shrink: 0;" onclick="ouvrirApercuFichier()"><i class="fa-solid fa-eye"></i></button>
@@ -279,7 +318,7 @@
     </div>
   </div>
 
-  <!-- MODALE NOTIFICATIONS -->
+  <!-- Modale Notifications -->
   <div id="modal-notifications" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; z-index:2000; justify-content:center; align-items:center;">
     <div onclick="fermerModalNotifications()" style="position:absolute; width:100%; height:100%; background:rgba(0,0,0,0.5);"></div>
     <div style="position:relative; background:var(--bg-wrapper); padding:24px; border-radius:16px; width:90%; max-width:500px; z-index:2001; max-height:80vh; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.2);">

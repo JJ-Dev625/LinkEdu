@@ -59,7 +59,7 @@ window.translations = {
     prop_designed_title: "Pensé pour vous",
     prop_designed_desc: "Une interface intuitive et moderne",
 
-    footer_credits: "Développé par Jean Junior DIRAMBA MAMBOUNDOU | Étudiant développeur à l'École 241 (Bikélé, Gabon)",
+    footer_credits: "Développé par Jean Junior DIRAMBA M.|Développeur Junior @ {École 241} (Bikélé, Gabon)",
 
     about_main_title: "À propos de LinkEdu",
     about_hero_tagline: "Propulsés pour l’Excellence Numérique.",
@@ -150,7 +150,7 @@ window.translations = {
     prop_designed_title: "Designed for you",
     prop_designed_desc: "An intuitive and modern interface",
 
-    footer_credits: "Developed by Jean Junior DIRAMBA MAMBOUNDOU | Student developer at École 241 (Bikélé, Gabon)",
+    footer_credits: "Developed by Jean Junior DIRAMBA M.| Junior Developer @ School {241} (Bikélé, Gabon)",
 
     about_main_title: "About LinkEdu",
     about_hero_tagline: "Powered for Digital Excellence.",
