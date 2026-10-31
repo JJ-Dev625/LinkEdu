@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkEdu — Espace Administration (Back-Office)</title>
+    <!-- FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles CSS spécifiques de l'administration -->
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <!-- Bouton Burger pour mobiles -->
+    <button id="burger-menu" class="burger-btn" aria-label="Menu de navigation">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- Conteneur principal de l'application admin -->
+    <div class="admin-container">
+        
+        <!-- Barre latérale de navigation (Sidebar) -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h2>Link<span>Edu</span></h2>
+                <p>Back-Office Administration</p>
+            </div>
+
+            <!-- Profil administrateur avec chargement d'avatar local -->
+            <div class="admin-profile-card">
+                <label for="avatar-input" class="avatar-label" title="Changer la photo de profil">
+                    <img id="admin-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Avatar Admin">
+                    <div class="avatar-overlay"><i class="fa-solid fa-camera"></i></div>
+                </label>
+                <input type="file" id="avatar-input" accept="image/*" style="display: none;" onchange="chargerAvatarLocal(event)">
+                <div class="admin-info">
+                    <h4>Admin Principal</h4>
+                    <span class="status-badge"><i class="fa-solid fa-circle"></i> En ligne</span>
+                </div>
+            </div>
+
+            <!-- Liens de navigation du tableau de bord -->
+            <ul class="nav-links">
+                <li data-target="dashboard" class="active">
+                    <i class="fa-solid fa-chart-pie"></i> <span>Tableau de bord</span>
+                </li>
+                <li data-target="traitement">
+                    <i class="fa-solid fa-clipboard-list"></i> <span>Dossiers en attente</span>
+                </li>
+                <li data-target="valides">
+                    <i class="fa-solid fa-user-check"></i> <span>Élèves Inscrits</span>
+                </li>
+                <li data-target="refuses">
+                    <i class="fa-solid fa-user-xmark"></i> <span>Dossiers & Remboursements</span>
+                </li>
+                <li data-target="tarifs">
+                    <i class="fa-solid fa-wallet"></i> <span>Frais de Scolarité</span>
+                </li>
+                <li data-target="classes">
+                    <i class="fa-solid fa-school"></i> <span>Gestion des Classes</span>
+                </li>
+                <li data-target="enseignants">
+                    <i class="fa-solid fa-chalkboard-user"></i> <span>Enseignants (ID Fixe)</span>
+                </li>
+                <li data-target="ministere">
+                    <i class="fa-solid fa-landmark"></i> <span>Veille Ministère</span>
+                </li>
+                <li data-target="annonces">
+                    <i class="fa-solid fa-bullhorn"></i> <span>Annonces Globales</span>
+                </li>
+            </ul>
+
+            <!-- Actions de bascule de thème et déconnexion -->
+            <div class="sidebar-footer">
+                <button id="theme-toggle-btn" class="theme-btn">
+                    <i class="fa-solid fa-moon"></i> <span>Mode Sombre</span>
+                </button>
+                <button class="btn-logout">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span>Déconnexion</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Zone de contenu dynamique injectée par le JavaScript -->
+        <main class="content">
+            <!-- Le contenu s'affiche dynamiquement ici -->
+        </main>
+
+    </div>
+
+    <!-- Fenêtre Modale universelle pour les détails et listes -->
+    <div id="modal-visualisation" class="modal-overlay modal-hidden">
+        <div class="modal-card glass-card">
+            <div id="modal-content">
+                <!-- Contenu dynamique de la modale -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Script JavaScript principal de l'administration -->
+    <script src="admin.js"></script>
+</body>
+</html>

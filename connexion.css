@@ -1,0 +1,340 @@
+/* =================================================================
+   LINKEDU - DESIGN SYSTEM & STYLESHEET (PAGE CONNEXION)
+   Charte : Bleu Nuit (#1F3962) & Vert Émeraude (#10B881)
+   =================================================================== */
+
+:root {
+  --primary: #1f3962;       /* Bleu Nuit LinkEdu */
+  --primary-gradient: linear-gradient(135deg, #1f3962, #0f172a);
+  --success: #10b881;       /* Vert Émeraude */
+  --accent: #34d399;
+  
+  --bg-body: #0f172a;
+  --bg-wrapper: #ffffff;
+  --bg-sheet: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --input-bg: #f8fafc;
+  --shadow-color: rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode {
+  --bg-body: #0b1120;
+  --bg-wrapper: #1e293b;
+  --bg-sheet: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --input-bg: #0f172a;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.auth-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-wrapper);
+  transition: background-color 0.3s ease;
+}
+
+/* --- HEADER ET ILLUSTRATION DYNAMIQUE --- */
+.login-header {
+  position: relative;
+  width: 100%;
+  height: 42vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  color: #ffffff;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+/* Arrière-plan image du profil */
+.hero-image-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hero-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(31, 57, 98, 0.6) 0%, rgba(15, 23, 42, 0.92) 100%);
+}
+
+.hero-top-bar {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 20;
+}
+
+.back-btn, .action-circle-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.back-btn:hover, .action-circle-btn:hover {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.hero-content-center {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.role-icon-badge {
+  font-size: 2.2rem;
+  margin-bottom: 6px;
+  color: var(--accent);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+.login-header h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-desc {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 320px;
+  line-height: 1.35;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* --- PANNEAU DU FORMULAIRE --- */
+.auth-sheet {
+  position: relative;
+  z-index: 50;
+  margin: -20px 16px auto 16px;
+  background: var(--bg-sheet);
+  border-radius: 20px;
+  padding: 24px 20px;
+  box-shadow: 0 15px 35px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.input-field-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(16, 184, 129, 0.2);
+}
+
+.password-input {
+  padding-right: 40px;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 4px;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  margin-top: 2px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.forgot-password {
+  color: var(--success);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.btn-primary-action {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 10px;
+  background-color: var(--success);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 184, 129, 0.3);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-primary-action:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.page-footer {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  padding: 12px 0 0 0;
+  border-top: 1px solid var(--border-color);
+  margin-top: 8px;
+}
+
+/* --- RESPONSIVE DESKTOP (PC & GRAND ÉCRAN) --- */
+@media (min-width: 768px) {
+  body { overflow: auto; }
+
+  .auth-wrapper {
+    max-width: 1000px;
+    height: 600px;
+    min-height: auto;
+    flex-direction: row;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+
+  .login-header {
+    width: 45%;
+    height: 100%;
+    padding: 30px;
+  }
+
+  .auth-sheet {
+    width: 55%;
+    height: 100%;
+    margin: 0;
+    padding: 45px 50px;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    justify-content: center;
+  }
+
+  .login-header h1 { font-size: 2.1rem; }
+  .role-icon-badge { font-size: 2.8rem; }
+}
+
+
